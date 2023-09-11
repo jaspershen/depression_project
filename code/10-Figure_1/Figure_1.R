@@ -2,7 +2,7 @@
 setwd(masstools::get_project_wd())
 rm(list = ls())
 
-source("code/tools.R")
+rm("code/tools.R")
 
 setwd("data_analysis/Figure_1/")
 
@@ -80,7 +80,6 @@ ggsave('Depression Boxplot.png',
        height = 4.5,
        width = 10)
 
-write.csv(ibsr_data, file = "ibsr_data.csv", row.names = FALSE)
 
 plot <-
   ggplot(ibsr_data, aes(x = Time, y = bdi_total)) +
