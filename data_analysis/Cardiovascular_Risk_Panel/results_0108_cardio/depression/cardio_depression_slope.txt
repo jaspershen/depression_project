@@ -1,0 +1,15 @@
+Call:
+SAM(x = t(data.matrix(cardio_depression_change_all$x_change)), 
+    y = data.matrix(cardio_depression_change_all$y_change), resp.type = "Quantitative", 
+    genenames = colnames(cardio_depression_change_all$x_change), 
+    random.seed = 6)
+
+Genes up
+          Gene ID         Gene Name          Score(d)      Numerator(r) Denominator(s+s0)        q-value(%) 
+        PF4.CXCL4                 9             1.065             0.616             0.579                 0 
+
+Genes down
+     Gene ID     Gene Name Score(d) Numerator(r) Denominator(s+s0) q-value(%)
+[1,] L.Selectin  6         -0.88    -0.493       0.561             30        
+[2,] Haptoglobin 8         -0.629   -0.349       0.554             30        
+[3,] SAP         7         -0.574   -0.33        0.575             30        
