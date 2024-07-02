@@ -1,2 +1,0 @@
-  Variables qvalue unadjusted pvalue
-1    Leptin      0                 0
