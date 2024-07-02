@@ -5,17 +5,17 @@ setwd(r4projects::get_project_wd())
 rm(list = ls())
 
 data <-
-  readxl::read_xlsx("data_analysis/some_figures/table2/data1.xlsx")
+  readxl::read_xlsx("3-data_analysis/some_figures/table2/data1.xlsx")
 
 ###metabolomics
-load("data_analysis/metabolomics_data/data_preparation/metabolites/expression_data")
-load("data_analysis/metabolomics_data/data_preparation/metabolites/sample_info")
-load("data_analysis/metabolomics_data/data_preparation/metabolites/variable_info")
+load("3-data_analysis/metabolomics_data/data_preparation/metabolites/expression_data")
+load("3-data_analysis/metabolomics_data/data_preparation/metabolites/sample_info")
+load("3-data_analysis/metabolomics_data/data_preparation/metabolites/variable_info")
 
-load("data_analysis/metabolomics_data/marker/depression_association_pos")
-load("data_analysis/metabolomics_data/marker/depression_association_neg")
+load("3-data_analysis/metabolomics_data/marker/depression_association_pos")
+load("3-data_analysis/metabolomics_data/marker/depression_association_neg")
 
-load("data_analysis/transcriptomics/data_preparation/transcriptomics_data")
+load("3-data_analysis/transcriptomics/data_preparation/transcriptomics_data")
 
 transcriptomics_sample_info <-
   extract_sample_info(transcriptomics_data)
@@ -27,8 +27,8 @@ sample_info <-
                    by = "subject_id") %>%
   dplyr::filter(!is.na(depressed))
 
-dir.create("data_analysis/some_figures/table2/pca_analysis")
-setwd("data_analysis/some_figures/table2/pca_analysis")
+dir.create("3-data_analysis/some_figures/table2/pca_analysis")
+setwd("3-data_analysis/some_figures/table2/pca_analysis")
 
 variable_info <-
   variable_info %>%

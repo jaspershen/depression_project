@@ -4,10 +4,10 @@ no_source()
 setwd(r4projects::get_project_wd())
 rm(list = ls())
 
-load("data_analysis/transcriptomics/data_preparation/transcriptomics_data")
+load("3-data_analysis/transcriptomics/data_preparation/transcriptomics_data")
 
-dir.create("data_analysis/transcriptomics/marker_compared_to_baseline")
-setwd("data_analysis/transcriptomics/marker_compared_to_baseline")
+dir.create("3-data_analysis/transcriptomics/marker_compared_to_baseline")
+setwd("3-data_analysis/transcriptomics/marker_compared_to_baseline")
 
 library(tidyverse)
 library(data.table)

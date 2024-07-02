@@ -4,22 +4,22 @@ setwd(r4projects::get_project_wd())
 
 rm(list = ls())
 
-source("code/tools.R")
+source("1-code/tools.R")
 
 ###load data
 
-load("data_analysis/transcriptomics/data_preparation/transcriptomics_data")
+load("3-data_analysis/transcriptomics/data_preparation/transcriptomics_data")
 
 transcriptomics_sample_info <-
   extract_sample_info(transcriptomics_data)
 
 ###cardopanel
-load("data_analysis/Cardiovascular_Risk_Panel/data_preparation/expression_data")
-load("data_analysis/Cardiovascular_Risk_Panel/data_preparation/sample_info")
-load("data_analysis/Cardiovascular_Risk_Panel/data_preparation/variable_info")
+load("3-data_analysis/Cardiovascular_Risk_Panel/data_preparation/expression_data")
+load("3-data_analysis/Cardiovascular_Risk_Panel/data_preparation/sample_info")
+load("3-data_analysis/Cardiovascular_Risk_Panel/data_preparation/variable_info")
 
-load("data_analysis/Cardiovascular_Risk_Panel/marker/depression_association_pos")
-load("data_analysis/Cardiovascular_Risk_Panel/marker/depression_association_neg")
+load("3-data_analysis/Cardiovascular_Risk_Panel/marker/depression_association_pos")
+load("3-data_analysis/Cardiovascular_Risk_Panel/marker/depression_association_neg")
 
 expression_data[1, ] =
   scale(as.numeric(expression_data[1, ])) %>%
@@ -42,12 +42,12 @@ variable_info_cardopanel <-
 
 
 ###cytokine
-load("data_analysis/Cytokines/data_preparation/expression_data")
-load("data_analysis/Cytokines/data_preparation/sample_info")
-load("data_analysis/Cytokines/data_preparation/variable_info")
+load("3-data_analysis/Cytokines/data_preparation/expression_data")
+load("3-data_analysis/Cytokines/data_preparation/sample_info")
+load("3-data_analysis/Cytokines/data_preparation/variable_info")
 
-load("data_analysis/Cytokines/marker/depression_association_pos")
-load("data_analysis/Cytokines/marker/depression_association_neg")
+load("3-data_analysis/Cytokines/marker/depression_association_pos")
+load("3-data_analysis/Cytokines/marker/depression_association_neg")
 
 depression_association_pos$Variables
 depression_association_neg$Variables
@@ -67,12 +67,12 @@ variable_info_cytokine <-
 range(expression_data_cytokine)
 
 ###lipid
-load("data_analysis/Lipids/data_preparation/expression_data")
-load("data_analysis/Lipids/data_preparation/sample_info")
-load("data_analysis/Lipids/data_preparation/variable_info")
+load("3-data_analysis/Lipids/data_preparation/expression_data")
+load("3-data_analysis/Lipids/data_preparation/sample_info")
+load("3-data_analysis/Lipids/data_preparation/variable_info")
 
-load("data_analysis/Lipids/marker/depression_association_pos")
-load("data_analysis/Lipids/marker/depression_association_neg")
+load("3-data_analysis/Lipids/marker/depression_association_pos")
+load("3-data_analysis/Lipids/marker/depression_association_neg")
 
 depression_association_pos$Variables
 depression_association_neg$Variables
@@ -92,12 +92,12 @@ variable_info_lipid <-
 range(expression_data_lipid)
 
 ###metabolic_panel
-load("data_analysis/Metabolic_Panel/data_preparation/expression_data")
-load("data_analysis/Metabolic_Panel/data_preparation/sample_info")
-load("data_analysis/Metabolic_Panel/data_preparation/variable_info")
+load("3-data_analysis/Metabolic_Panel/data_preparation/expression_data")
+load("3-data_analysis/Metabolic_Panel/data_preparation/sample_info")
+load("3-data_analysis/Metabolic_Panel/data_preparation/variable_info")
 
-load("data_analysis/Metabolic_Panel/marker/depression_association_pos")
-load("data_analysis/Metabolic_Panel/marker/depression_association_neg")
+load("3-data_analysis/Metabolic_Panel/marker/depression_association_pos")
+load("3-data_analysis/Metabolic_Panel/marker/depression_association_neg")
 
 depression_association_pos$Variables
 depression_association_neg$Variables
@@ -117,12 +117,12 @@ variable_info_metabolic_panel <-
 range(expression_data_metabolic_panel)
 
 ###metabolomics
-load("data_analysis/metabolomics_data/data_preparation/metabolites/expression_data")
-load("data_analysis/metabolomics_data/data_preparation/metabolites/sample_info")
-load("data_analysis/metabolomics_data/data_preparation/metabolites/variable_info")
+load("3-data_analysis/metabolomics_data/data_preparation/metabolites/expression_data")
+load("3-data_analysis/metabolomics_data/data_preparation/metabolites/sample_info")
+load("3-data_analysis/metabolomics_data/data_preparation/metabolites/variable_info")
 
-load("data_analysis/metabolomics_data/marker/depression_association_pos")
-load("data_analysis/metabolomics_data/marker/depression_association_neg")
+load("3-data_analysis/metabolomics_data/marker/depression_association_pos")
+load("3-data_analysis/metabolomics_data/marker/depression_association_neg")
 
 depression_association_pos$Variables
 depression_association_neg$Variables
@@ -146,8 +146,8 @@ rownames(expression_data_metabolomics) == variable_info_metabolomics$variable_id
 range(expression_data_metabolomics)
 
 setwd(r4projects::get_project_wd())
-dir.create("data_analysis/multi_omics/pca_analysis/")
-setwd("data_analysis/multi_omics/pca_analysis/")
+dir.create("3-data_analysis/multi_omics/pca_analysis/")
+setwd("3-data_analysis/multi_omics/pca_analysis/")
 
 intersect_name <-
   Reduce(f = intersect,

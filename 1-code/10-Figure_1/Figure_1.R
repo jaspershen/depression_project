@@ -2,9 +2,9 @@
 setwd(r4projects::get_project_wd())
 rm(list = ls())
 
-rm("code/tools.R")
+rm("1-code/tools.R")
 
-setwd("data_analysis/Figure_1/")
+setwd("3-data_analysis/Figure_1/")
 
 library(tidyverse)
 

@@ -3,9 +3,9 @@ no_function()
 setwd(r4projects::get_project_wd())
 library(tidyverse)
 library(plyr)
-source("code/tools.R")
+source("1-code/tools.R")
 
-setwd("data_analysis/Lipids/")
+setwd("3-data_analysis/Lipids/")
 
 # ###load data
 load("data_preparation/expression_data")

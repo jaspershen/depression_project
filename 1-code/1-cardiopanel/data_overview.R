@@ -4,16 +4,16 @@ no_function()
 setwd(r4projects::get_project_wd())
 library(tidyverse)
 rm(list = ls())
-source("code/tools.R")
+source("1-code/tools.R")
 
 ###load data
 ###cardopanel
-load("data_analysis/Cardiovascular_Risk_Panel/data_preparation/expression_data")
-load("data_analysis/Cardiovascular_Risk_Panel/data_preparation/sample_info")
-load("data_analysis/Cardiovascular_Risk_Panel/data_preparation/variable_info")
+load("3-data_analysis/Cardiovascular_Risk_Panel/data_preparation/expression_data")
+load("3-data_analysis/Cardiovascular_Risk_Panel/data_preparation/sample_info")
+load("3-data_analysis/Cardiovascular_Risk_Panel/data_preparation/variable_info")
 
-load("data_analysis/Cardiovascular_Risk_Panel/marker/depression_association_pos")
-load("data_analysis/Cardiovascular_Risk_Panel/marker/depression_association_neg")
+load("3-data_analysis/Cardiovascular_Risk_Panel/marker/depression_association_pos")
+load("3-data_analysis/Cardiovascular_Risk_Panel/marker/depression_association_neg")
 
 expression_data[1,] =
   scale(as.numeric(expression_data[1,])) %>% 

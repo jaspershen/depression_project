@@ -4,13 +4,13 @@ no_source()
 setwd(r4projects::get_project_wd())
 rm(list = ls())
 
-load("data_analysis/sample_info/sample_info")
+load("3-data_analysis/sample_info/sample_info")
 
 total_sample_info <-
   sample_info
 
 setwd(r4projects::get_project_wd())
-setwd("data_analysis/transcriptomics/")
+setwd("3-data_analysis/transcriptomics/")
 
 library(tidyverse)
 library(data.table)

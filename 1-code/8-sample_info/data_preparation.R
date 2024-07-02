@@ -5,10 +5,10 @@ library(tidyverse)
 setwd(r4projects::get_project_wd())
 rm(list = ls())
 
-data <- readr::read_csv("data_analysis/Psychometrics/Psychometric Data.csv")
+data <- readr::read_csv("3-data_analysis/Psychometrics/Psychometric Data.csv")
 
-dir.create("data_analysis/sample_info/", recursive = TRUE)
-setwd("data_analysis/sample_info/")
+dir.create("3-data_analysis/sample_info/", recursive = TRUE)
+setwd("3-data_analysis/sample_info/")
 
 
 sample_info = data

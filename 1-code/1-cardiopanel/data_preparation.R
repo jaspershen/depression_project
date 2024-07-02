@@ -5,7 +5,7 @@ library(tidyverse)
 setwd(r4projects::get_project_wd())
 rm(list = ls())
 
-setwd("data_analysis/Cardiovascular_Risk_Panel/")
+setwd("3-data_analysis/Cardiovascular_Risk_Panel/")
 
 data = readr::read_csv("processed_CardioPanel_data.csv")
 

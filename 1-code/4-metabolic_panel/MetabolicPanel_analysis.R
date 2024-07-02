@@ -1,7 +1,7 @@
 no_function()
 
 setwd(r4projects::get_project_wd())
-setwd("data_analysis/Metabolic_Panel/")
+setwd("3-data_analysis/Metabolic_Panel/")
 
 library(samr)
 library(zoo)

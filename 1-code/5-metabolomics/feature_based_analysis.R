@@ -7,16 +7,16 @@ library(tidyverse)
 library(data.table)
 
 ###load data
-load("data_analysis/metabolomics_data/data_preparation/peaks/variable_info")
+load("3-data_analysis/metabolomics_data/data_preparation/peaks/variable_info")
 
 ##load marker
-load("data_analysis/metabolomics_data/marker/depression_association_pos")
-load("data_analysis/metabolomics_data/marker/depression_association_neg")
+load("3-data_analysis/metabolomics_data/marker/depression_association_pos")
+load("3-data_analysis/metabolomics_data/marker/depression_association_neg")
 
 dim(depression_association_pos)
 dim(depression_association_neg)
 
-setwd("data_analysis/metabolomics_data/PIUMet")
+setwd("3-data_analysis/metabolomics_data/PIUMet")
 
 piumet_file = rbind(
   depression_association_pos %>%

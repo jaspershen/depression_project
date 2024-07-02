@@ -7,10 +7,10 @@ rm(list = ls())
 library(tidyverse)
 
 data <-
-  readxl::read_xlsx("data_analysis/some_figures/table2/data1.xlsx")
+  readxl::read_xlsx("3-data_analysis/some_figures/table2/data1.xlsx")
 
-dir.create("data_analysis/some_figures/table2/pathway_visualization")
-setwd("data_analysis/some_figures/table2/pathway_visualization")
+dir.create("3-data_analysis/some_figures/table2/pathway_visualization")
+setwd("3-data_analysis/some_figures/table2/pathway_visualization")
 
 data$qvalue[data$qvalue == "<0.001"] <- 0.001
 

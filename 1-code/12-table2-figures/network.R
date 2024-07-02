@@ -5,10 +5,10 @@ setwd(r4projects::get_project_wd())
 rm(list = ls())
 
 data <-
-  readxl::read_xlsx("data_analysis/some_figures/table2/data2.xlsx")
+  readxl::read_xlsx("3-data_analysis/some_figures/table2/data2.xlsx")
 
-dir.create("data_analysis/some_figures/table2/network")
-setwd("data_analysis/some_figures/table2/network")
+dir.create("3-data_analysis/some_figures/table2/network")
+setwd("3-data_analysis/some_figures/table2/network")
 
 ###network to show the correlations between disease and molecules
 

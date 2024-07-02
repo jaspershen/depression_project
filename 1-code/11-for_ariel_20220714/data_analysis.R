@@ -1,6 +1,6 @@
 setwd(r4projects::get_project_wd())
 
-setwd("data_analysis/for_ariel_20220714/")
+setwd("3-data_analysis/for_ariel_20220714/")
 
 metabolite_data <- 
   readr::read_csv("processed_metabolites_data.csv")

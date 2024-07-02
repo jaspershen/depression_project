@@ -5,7 +5,7 @@ setwd(r4projects::get_project_wd())
 rm(list = ls())
 library(tidyverse)
 
-load("data_analysis/metabolomics_data/data_preparation/sample_info")
+load("3-data_analysis/metabolomics_data/data_preparation/sample_info")
 
 subject_info <-
   sample_info %>%
@@ -17,12 +17,12 @@ library(tidyverse)
 library(data.table)
 library(tidymass)
 
-load("data_analysis/transcriptomics/data_preparation/transcriptomics_data")
+load("3-data_analysis/transcriptomics/data_preparation/transcriptomics_data")
 
 library(RNAAgeCalc)
 
-dir.create("data_analysis/transcriptomics/age_prediction")
-setwd("data_analysis/transcriptomics/age_prediction")
+dir.create("3-data_analysis/transcriptomics/age_prediction")
+setwd("3-data_analysis/transcriptomics/age_prediction")
 
 ###only remain the protein-code gene
 transcriptomics_data <-

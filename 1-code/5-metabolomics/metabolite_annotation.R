@@ -8,7 +8,7 @@ no_source()
 ###RPLC 
 ###positive mode
 # setwd(r4projects::get_project_wd())
-# setwd("data_analysis/metabolomics_data/MSMS Annotation/RPLC pos/")
+# setwd("3-data_analysis/metabolomics_data/MSMS Annotation/RPLC pos/")
 # library(tidyverse)
 # library(data.table)
 # library(metID)
@@ -226,7 +226,7 @@ no_source()
 # ###RPLC 
 # ###negative mode
 # setwd(r4projects::get_project_wd())
-# setwd("data_analysis/metabolomics_data/MSMS Annotation/RPLC neg/")
+# setwd("3-data_analysis/metabolomics_data/MSMS Annotation/RPLC neg/")
 # library(tidyverse)
 # library(data.table)
 # library(metID)
@@ -451,7 +451,7 @@ no_source()
 # ###HILIC 
 # ###positive mode
 # setwd(r4projects::get_project_wd())
-# setwd("data_analysis/metabolomics_data/MSMS Annotation/HILIC pos/")
+# setwd("3-data_analysis/metabolomics_data/MSMS Annotation/HILIC pos/")
 # library(tidyverse)
 # library(data.table)
 # library(metID)
@@ -669,7 +669,7 @@ no_source()
 # ###HILIC 
 # ###negative mode
 # setwd(r4projects::get_project_wd())
-# setwd("data_analysis/metabolomics_data/MSMS Annotation/HILIC neg/")
+# setwd("3-data_analysis/metabolomics_data/MSMS Annotation/HILIC neg/")
 # library(tidyverse)
 # library(data.table)
 # library(metID)
@@ -882,7 +882,7 @@ no_source()
 
 
 setwd(r4projects::get_project_wd())
-setwd("data_analysis/metabolomics_data/MSMS Annotation/")
+setwd("3-data_analysis/metabolomics_data/MSMS Annotation/")
 rplc_pos = readr::read_csv("RPLC pos/annotation_table.csv")
 rplc_neg = readr::read_csv("RPLC neg/annotation_table.csv")
 hilic_pos = readr::read_csv("HILIC pos/annotation_table.csv")

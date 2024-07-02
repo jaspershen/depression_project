@@ -6,11 +6,11 @@ rm(list = ls())
 
 library(tidyverse)
 
-load("data_analysis/transcriptomics/data_preparation/transcriptomics_data")
+load("3-data_analysis/transcriptomics/data_preparation/transcriptomics_data")
 
-dir.create("data_analysis/transcriptomics/heatmap_for_some_genes/all_participant",
+dir.create("3-data_analysis/transcriptomics/heatmap_for_some_genes/all_participant",
            recursive = TRUE)
-setwd("data_analysis/transcriptomics/heatmap_for_some_genes/all_participant")
+setwd("3-data_analysis/transcriptomics/heatmap_for_some_genes/all_participant")
 
 # data <- readr::read_csv("Gene.csv")
 

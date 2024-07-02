@@ -4,14 +4,14 @@ no_function()
 setwd(r4projects::get_project_wd())
 library(tidyverse)
 rm(list = ls())
-source("code/tools.R")
+source("1-code/tools.R")
 
 ###load data
 ###cardopanel
-load("data_analysis/Cardiovascular_Risk_Panel/data_preparation/sample_info")
+load("3-data_analysis/Cardiovascular_Risk_Panel/data_preparation/sample_info")
 
 setwd(r4projects::get_project_wd())
-setwd("data_analysis/multi_omics/k_means_depression_index/")
+setwd("3-data_analysis/multi_omics/k_means_depression_index/")
 
 temp_data = 
   sample_info %>% 

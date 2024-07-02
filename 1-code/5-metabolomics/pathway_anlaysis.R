@@ -6,11 +6,11 @@ rm(list = ls())
 library(tidyverse)
 library(data.table)
 
-load("data_analysis/metabolomics_data/data_preparation/expression_data")
-load("data_analysis/metabolomics_data/data_preparation/sample_info")
-load("data_analysis/metabolomics_data/data_preparation/variable_info")
+load("3-data_analysis/metabolomics_data/data_preparation/expression_data")
+load("3-data_analysis/metabolomics_data/data_preparation/sample_info")
+load("3-data_analysis/metabolomics_data/data_preparation/variable_info")
 
-setwd("data_analysis/metabolomics_data/Pathway Analysis/")
+setwd("3-data_analysis/metabolomics_data/Pathway Analysis/")
 
 combined_dep_pathways =
   readr::read_csv("combined_dep_pathways.csv")

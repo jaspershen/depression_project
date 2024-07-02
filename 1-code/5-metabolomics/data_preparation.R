@@ -2,7 +2,7 @@
 no_source()
 
 setwd(r4projects::get_project_wd())
-setwd("data_analysis/metabolomics_data/")
+setwd("3-data_analysis/metabolomics_data/")
 library(tidyverse)
 library(data.table)
 

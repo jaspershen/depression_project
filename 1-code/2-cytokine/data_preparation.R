@@ -5,7 +5,7 @@ library(tidyverse)
 setwd(r4projects::get_project_wd())
 rm(list = ls())
 
-setwd("data_analysis/Cytokines/")
+setwd("3-data_analysis/Cytokines/")
 
 data = readr::read_csv("corrected_cytokines_data.csv")
 

@@ -3,16 +3,16 @@ no_function()
 setwd(r4projects::get_project_wd())
 library(tidyverse)
 library(plyr)
-source("code/tools.R")
+source("1-code/tools.R")
 
 ###load data
-load("data_analysis/Cardiovascular_Risk_Panel/data_preparation/expression_data")
-load("data_analysis/Cardiovascular_Risk_Panel/data_preparation/sample_info")
-load("data_analysis/Cardiovascular_Risk_Panel/data_preparation/variable_info")
+load("3-data_analysis/Cardiovascular_Risk_Panel/data_preparation/expression_data")
+load("3-data_analysis/Cardiovascular_Risk_Panel/data_preparation/sample_info")
+load("3-data_analysis/Cardiovascular_Risk_Panel/data_preparation/variable_info")
 
 
-dir.create("data_analysis/Cardiovascular_Risk_Panel/DEG", recursive = TRUE)
-setwd("data_analysis/Cardiovascular_Risk_Panel/DEG")
+dir.create("3-data_analysis/Cardiovascular_Risk_Panel/DEG", recursive = TRUE)
+setwd("3-data_analysis/Cardiovascular_Risk_Panel/DEG")
 
 dim(expression_data)
 
