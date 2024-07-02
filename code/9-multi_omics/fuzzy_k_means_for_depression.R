@@ -1,7 +1,7 @@
 ##
 no_function()
 
-setwd(masstools::get_project_wd())
+setwd(r4projects::get_project_wd())
 library(tidyverse)
 rm(list = ls())
 source("code/tools.R")
@@ -10,7 +10,7 @@ source("code/tools.R")
 ###cardopanel
 load("data_analysis/Cardiovascular_Risk_Panel/data_preparation/sample_info")
 
-setwd(masstools::get_project_wd())
+setwd(r4projects::get_project_wd())
 setwd("data_analysis/multi_omics/k_means_depression_index/")
 
 temp_data = 
@@ -523,7 +523,7 @@ ggsave(
 
 
 # ###functional annotation for different cluster
-# setwd(masstools::get_project_wd())
+# setwd(r4projects::get_project_wd())
 # load("data/shake_study/metabolome_data_analysis/metabolites/DEG/subject_data_mean")
 # load("data/shake_study/metabolome_data_analysis/metabolites/DEG/subject_data_sd")
 # load("data/shake_study/metabolome_data_analysis/metabolites/DEG/subject_data_sem")
@@ -1291,7 +1291,7 @@ ggsave(
 # 
 # 
 # ###lipid changes accoridng to carbon and un number
-# setwd(masstools::get_project_wd())
+# setwd(r4projects::get_project_wd())
 # lipid_info <- read.table("data/shake_study/lipidomics_data_analysis/DEG/Lipomat05.txt", header = TRUE, sep = "\t")
 # load("data/shake_study/lipidomics_data_analysis/data_preparation/expression_data")
 # lipidomics_expression_data <-

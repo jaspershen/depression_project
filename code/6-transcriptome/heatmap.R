@@ -1,7 +1,7 @@
 ###
 no_source()
 
-setwd(masstools::get_project_wd())
+setwd(r4projects::get_project_wd())
 rm(list = ls())
 
 library(tidyverse)
@@ -73,6 +73,14 @@ gene_list2 <-
   )
 
 
+##remove T6
+
+transcriptomics_data <-
+  transcriptomics_data %>%
+  activate_mass_dataset(what = "sample_info") %>%
+  dplyr::filter(!is.na(Time)) %>%
+  dplyr::filter(!Time %in% "T6")
+
 expression_data <-
   transcriptomics_data %>%
   extract_expression_data()
@@ -115,7 +123,7 @@ new_expression_data <-
 
 
 temp_data1 <-
-  new_expression_data[gene_list1, ]
+  new_expression_data[gene_list1,]
 
 library(ComplexHeatmap)
 
@@ -151,7 +159,7 @@ ggsave(plot1,
 
 
 temp_data2 <-
-  new_expression_data[gene_list2, ]
+  new_expression_data[gene_list2,]
 
 library(ComplexHeatmap)
 
@@ -190,10 +198,10 @@ ggsave(plot2,
 ####Heatmap for all the participants
 dim(expression_data)
 temp_data1 <-
-  expression_data[gene_list1,]
+  expression_data[gene_list1, ]
 
 temp_data2 <-
-  expression_data[gene_list2,]
+  expression_data[gene_list2, ]
 
 sample_info <-
   data.frame(sample_id = colnames(temp_data1)) %>%

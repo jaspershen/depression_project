@@ -1,7 +1,7 @@
 ##
 no_function()
 
-setwd(masstools::get_project_wd())
+setwd(r4projects::get_project_wd())
 library(tidyverse)
 rm(list = ls())
 source("code/tools.R")
@@ -139,7 +139,7 @@ rownames(expression_data_metabolomics) == variable_info_metabolomics$variable_id
 
 range(expression_data_metabolomics)
 
-setwd(masstools::get_project_wd())
+setwd(r4projects::get_project_wd())
 setwd("data_analysis/multi_omics/k_means/")
 
 intersect_name <- 
@@ -182,18 +182,18 @@ dim(expression_data)
 dim(sample_info)
 dim(variable_info)
 
-as.data.frame(t(expression_data)) %>% 
-purrr::map(function(x){
-data.frame(sample_info, x) %>% 
-    dplyr::mutate(subject_id = as.character(subject_id)) %>% 
-    ggplot(aes(x, bdi_total)) +
-    geom_point(aes(fill = subject_id), 
-               shape = 21, 
-               size = 3,
-               show.legend = FALSE) +
-    geom_smooth(aes(fill = subject_id), method = "lm") +
-    base_theme
-})
+# as.data.frame(t(expression_data)) %>% 
+# purrr::map(function(x){
+# data.frame(sample_info, x) %>% 
+#     dplyr::mutate(subject_id = as.character(subject_id)) %>% 
+#     ggplot(aes(x, bdi_total)) +
+#     geom_point(aes(fill = subject_id), 
+#                shape = 21, 
+#                size = 3,
+#                show.legend = FALSE) +
+#     geom_smooth(aes(fill = subject_id), method = "lm") +
+#     base_theme
+# })
 
 
 library(Mfuzz)
@@ -497,6 +497,12 @@ for (idx in 1:4) {
     width = 8,
     height = 7
   )
+  ggsave(
+    plot,
+    filename = file.path(path, paste("cluster", idx, ".png", sep = "")),
+    width = 8,
+    height = 7
+  )
 }
 
 dim(cluster_data)
@@ -560,7 +566,7 @@ plot <-
     y = "Z-score",
     title = paste(
       "Unclustered moleculars (",
-      length(non_metabolite),
+      length(non_molecular),
       " moleculars)",
       sep = ""
     )
@@ -653,9 +659,228 @@ ggsave(
   height = 7
 )
 
+ggsave(
+  plot = plot,
+  filename = "heatmap_for_all_cluster.png",
+  width = 3,
+  height = 7
+)
 
+###heatmap for cluster 1
+temp_data <-
+  temp_data_mean[c(cluster1$variable_id),]
+
+temp_data <-
+  apply(temp_data, 1, function(x) {
+    (x - mean(x)) / sd(x)
+  }) %>%
+  t() %>%
+  as.data.frame()
+
+rownames(temp_data) <-
+  variable_info$mol_name[match(rownames(temp_data), variable_info$variable_id)]
+
+pal <-
+  wesanderson::wes_palette(name = "Rushmore1", n = 100, type = "continuous")
+
+
+plot <-
+  Heatmap(
+    temp_data,
+    cluster_columns = FALSE,
+    cluster_rows = FALSE,
+    show_row_names = TRUE,
+    border = TRUE,
+    row_names_side = "left",
+    row_names_gp = gpar(fontsize = 7, 
+                        col = text_color),
+    col = col_fun,
+    name = "Z score",
+    column_names_rot = 0
+  )
+
+plot <- ggplotify::as.ggplot(plot)
+
+plot
+
+ggsave(
+  plot = plot,
+  filename = "heatmap_for_cluster1.pdf",
+  width = 6,
+  height = 7
+)
+
+ggsave(
+  plot = plot,
+  filename = "heatmap_for_cluster1.png",
+  width = 6,
+  height = 7
+)
+
+
+
+###heatmap for cluster 2
+temp_data <-
+  temp_data_mean[c(cluster2$variable_id),]
+
+temp_data <-
+  apply(temp_data, 1, function(x) {
+    (x - mean(x)) / sd(x)
+  }) %>%
+  t() %>%
+  as.data.frame()
+
+rownames(temp_data) <-
+  variable_info$mol_name[match(rownames(temp_data), variable_info$variable_id)]
+
+pal <-
+  wesanderson::wes_palette(name = "Rushmore1", n = 100, type = "continuous")
+
+
+plot <-
+  Heatmap(
+    temp_data,
+    cluster_columns = FALSE,
+    cluster_rows = FALSE,
+    show_row_names = TRUE,
+    border = TRUE,
+    row_names_side = "left",
+    row_names_gp = gpar(fontsize = 7, 
+                        col = text_color),
+    col = col_fun,
+    name = "Z score",
+    column_names_rot = 0
+  )
+
+plot <- ggplotify::as.ggplot(plot)
+
+plot
+
+ggsave(
+  plot = plot,
+  filename = "heatmap_for_cluster2.pdf",
+  width = 6,
+  height = 7
+)
+
+ggsave(
+  plot = plot,
+  filename = "heatmap_for_cluster2.png",
+  width = 6,
+  height = 7
+)
+
+
+
+
+###heatmap for cluster 3
+temp_data <-
+  temp_data_mean[c(cluster3$variable_id),]
+
+temp_data <-
+  apply(temp_data, 1, function(x) {
+    (x - mean(x)) / sd(x)
+  }) %>%
+  t() %>%
+  as.data.frame()
+
+rownames(temp_data) <-
+  variable_info$mol_name[match(rownames(temp_data), variable_info$variable_id)]
+
+pal <-
+  wesanderson::wes_palette(name = "Rushmore1", n = 100, type = "continuous")
+
+
+plot <-
+  Heatmap(
+    temp_data,
+    cluster_columns = FALSE,
+    cluster_rows = FALSE,
+    show_row_names = TRUE,
+    border = TRUE,
+    row_names_side = "left",
+    row_names_gp = gpar(fontsize = 7, 
+                        col = text_color),
+    col = col_fun,
+    name = "Z score",
+    column_names_rot = 0
+  )
+
+plot <- ggplotify::as.ggplot(plot)
+
+plot
+
+ggsave(
+  plot = plot,
+  filename = "heatmap_for_cluster3.pdf",
+  width = 6,
+  height = 7
+)
+
+ggsave(
+  plot = plot,
+  filename = "heatmap_for_cluster3.png",
+  width = 6,
+  height = 7
+)
+
+
+###heatmap for cluster 4
+temp_data <-
+  temp_data_mean[c(cluster4$variable_id),]
+
+temp_data <-
+  apply(temp_data, 1, function(x) {
+    (x - mean(x)) / sd(x)
+  }) %>%
+  t() %>%
+  as.data.frame()
+
+rownames(temp_data) <-
+  variable_info$mol_name[match(rownames(temp_data), variable_info$variable_id)]
+
+pal <-
+  wesanderson::wes_palette(name = "Rushmore1", n = 100, type = "continuous")
+
+
+plot <-
+  Heatmap(
+    temp_data,
+    cluster_columns = FALSE,
+    cluster_rows = FALSE,
+    show_row_names = TRUE,
+    border = TRUE,
+    row_names_side = "left",
+    row_names_gp = gpar(fontsize = 7, 
+                        col = text_color),
+    col = col_fun,
+    name = "Z score",
+    column_names_rot = 0
+  )
+
+plot <- ggplotify::as.ggplot(plot)
+
+plot
+
+ggsave(
+  plot = plot,
+  filename = "heatmap_for_cluster4.pdf",
+  width = 6,
+  height = 7
+)
+
+ggsave(
+  plot = plot,
+  filename = "heatmap_for_cluster4.png",
+  width = 6,
+  height = 7
+)
+
+
+####heatmap for each cluster
+##cluste 1
 # ###functional annotation for different cluster
-# setwd(masstools::get_project_wd())
+# setwd(r4projects::get_project_wd())
 # load("data/shake_study/metabolome_data_analysis/metabolites/DEG/subject_data_mean")
 # load("data/shake_study/metabolome_data_analysis/metabolites/DEG/subject_data_sd")
 # load("data/shake_study/metabolome_data_analysis/metabolites/DEG/subject_data_sem")
@@ -1423,7 +1648,7 @@ ggsave(
 # 
 # 
 # ###lipid changes accoridng to carbon and un number
-# setwd(masstools::get_project_wd())
+# setwd(r4projects::get_project_wd())
 # lipid_info <- read.table("data/shake_study/lipidomics_data_analysis/DEG/Lipomat05.txt", header = TRUE, sep = "\t")
 # load("data/shake_study/lipidomics_data_analysis/data_preparation/expression_data")
 # lipidomics_expression_data <-

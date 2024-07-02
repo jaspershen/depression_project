@@ -1,7 +1,7 @@
 ###
 no_source()
 library(tidyverse)
-setwd(masstools::get_project_wd())
+setwd(r4projects::get_project_wd())
 
 rm(list = ls())
 
@@ -34,17 +34,19 @@ transcriptomics_data <-
 # dplyr::filter(GENETYPE == "protein-coding")
 
 # #####T1 point
-# data <-
-#   transcriptomics_data %>%
-#   activate_mass_dataset(what = "sample_info") %>%
-#   dplyr::filter(stringr::str_detect(sample_id, "T1")) %>%
-#   extract_expression_data()
-#
-# chronage <-
-#   data.frame(sampleid = colnames(data)) %>%
-#   dplyr::mutate(subject_id = stringr::str_extract(sampleid, "[0-9]{1,2}") %>% as.character()) %>%
-#   dplyr::left_join(subject_info, by = "subject_id") %>%
-#   dplyr::select(sampleid, age)
+data <-
+  transcriptomics_data %>%
+  activate_mass_dataset(what = "sample_info") %>%
+  dplyr::filter(stringr::str_detect(sample_id, "T1")) %>%
+  extract_expression_data()
+
+massdataset::export_mass_dataset(object = transcriptomics_data, file_type = "csv")
+
+chronage <-
+  data.frame(sampleid = colnames(data)) %>%
+  dplyr::mutate(subject_id = stringr::str_extract(sampleid, "[0-9]{1,2}") %>% as.character()) %>%
+  dplyr::left_join(subject_info, by = "subject_id") %>%
+  dplyr::select(sampleid, age)
 #
 # t1_result <-
 #   predict_age(

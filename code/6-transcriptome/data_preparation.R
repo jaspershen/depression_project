@@ -1,7 +1,7 @@
 ###
 no_source()
 
-setwd(masstools::get_project_wd())
+setwd(r4projects::get_project_wd())
 rm(list = ls())
 
 load("data_analysis/sample_info/sample_info")
@@ -9,7 +9,7 @@ load("data_analysis/sample_info/sample_info")
 total_sample_info <-
   sample_info
 
-setwd(masstools::get_project_wd())
+setwd(r4projects::get_project_wd())
 setwd("data_analysis/transcriptomics/")
 
 library(tidyverse)
