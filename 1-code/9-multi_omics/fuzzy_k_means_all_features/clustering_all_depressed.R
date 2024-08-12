@@ -245,7 +245,6 @@ variable_info_transcriptomics <-
 rownames(expression_data_transcriptomics) <-
   variable_info_transcriptomics$variable_id
 
-
 setwd(r4projects::get_project_wd())
 dir.create("3-data_analysis/multi_omics_all_features/depressed/",
            recursive = TRUE)
@@ -261,7 +260,6 @@ sample_info_cardopanel <-
 expression_data_cardopanel <-
   expression_data_cardopanel[, sample_info_cardopanel$sample_id]
 
-
 expression_data_cardopanel2 <-
   sort(unique(sample_info_cardopanel$Time)) %>%
   purrr::map(function(x) {
@@ -275,7 +273,6 @@ expression_data_cardopanel2 <-
 
 colnames(expression_data_cardopanel2) <-
   sort(unique(sample_info_cardopanel$Time))
-
 
 sample_info_cytokine <-
   sample_info_cytokine %>%
@@ -300,7 +297,6 @@ expression_data_cytokine2 <-
 
 colnames(expression_data_cytokine2) <-
   sort(unique(sample_info_cytokine$Time))
-
 
 sample_info_lipid <-
   sample_info_lipid %>%
@@ -377,7 +373,6 @@ expression_data_metabolomics2 <-
 
 colnames(expression_data_metabolomics2) <-
   sort(unique(sample_info_metabolomics$Time))
-
 
 expression_data_transcriptomics <-
   expression_data_transcriptomics %>%
@@ -731,14 +726,14 @@ cluster_info %>%
 final_cluster_info <-
   cluster_info
 
-save(final_cluster_info, file = "final_cluster_info")
-
-openxlsx::write.xlsx(
-  final_cluster_info,
-  file = "final_cluster_info.xlsx",
-  asTable = TRUE,
-  overwrite = TRUE
-)
+# save(final_cluster_info, file = "final_cluster_info")
+# load("final_cluster_info")
+# openxlsx::write.xlsx(
+#   final_cluster_info,
+#   file = "final_cluster_info.xlsx",
+#   asTable = TRUE,
+#   overwrite = TRUE
+# )
 
 dim(final_cluster_info)
 

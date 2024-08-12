@@ -256,40 +256,34 @@ t6_result <-
 
 t1_result <-
   t1_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge,
-                time_point = "T1") %>%
+  dplyr::mutate(age_diff = RNAAge - ChronAge, time_point = "T1") %>%
   dplyr::select(subject_id, age_diff, time_point, AgeAccelResid)
 
 t2_result <-
   t2_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge,
-                time_point = "T2") %>%
+  dplyr::mutate(age_diff = RNAAge - ChronAge, time_point = "T2") %>%
   dplyr::select(subject_id, age_diff, time_point, AgeAccelResid)
 
 t3_result <-
   t3_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge,
-                time_point = "T3") %>%
+  dplyr::mutate(age_diff = RNAAge - ChronAge, time_point = "T3") %>%
   dplyr::select(subject_id, age_diff, time_point, AgeAccelResid)
 
 t4_result <-
   t4_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge,
-                time_point = "T4") %>%
+  dplyr::mutate(age_diff = RNAAge - ChronAge, time_point = "T4") %>%
   dplyr::select(subject_id, age_diff, time_point) %>%
   dplyr::mutate(AgeAccelResid = NA)
 
 t5_result <-
   t5_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge,
-                time_point = "T5") %>%
+  dplyr::mutate(age_diff = RNAAge - ChronAge, time_point = "T5") %>%
   dplyr::select(subject_id, age_diff, time_point) %>%
   dplyr::mutate(AgeAccelResid = NA)
 
 t6_result <-
   t6_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge,
-                time_point = "T6") %>%
+  dplyr::mutate(age_diff = RNAAge - ChronAge, time_point = "T6") %>%
   dplyr::select(subject_id, age_diff, time_point) %>%
   dplyr::mutate(AgeAccelResid = NA)
 
@@ -563,21 +557,17 @@ plot <-
   ), numeric = TRUE))) %>%
   dplyr::filter(!is.na(AgeAccelResid)) %>%
   ggplot(aes(time_point, AgeAccelResid)) +
-  geom_line(aes(group = subject_id,
-                color = subject_id),
-            show.legend = FALSE) +
-  geom_point(aes(group = subject_id,
-                 color = subject_id),
-             show.legend = FALSE) +
+  geom_line(aes(group = subject_id, color = subject_id), show.legend = FALSE) +
+  geom_point(aes(group = subject_id, color = subject_id), show.legend = FALSE) +
   theme_bw() +
   facet_wrap(facets = vars(subject_id))
 
 plot
 
-ggsave(plot,
-       filename = "age_AccelResid_each_person.pdf",
-       width = 7,
-       height = 6)
+# ggsave(plot,
+#        filename = "age_AccelResid_each_person.pdf",
+#        width = 7,
+#        height = 6)
 
 library(ggsignif)
 
@@ -590,12 +580,8 @@ plot <-
   dplyr::filter(!is.na(AgeAccelResid)) %>%
   ggplot(aes(time_point, AgeAccelResid)) +
   geom_boxplot(aes(group = time_point)) +
-  geom_line(aes(group = subject_id,
-                color = subject_id),
-            show.legend = FALSE) +
-  geom_point(aes(group = subject_id,
-                 color = subject_id),
-             show.legend = FALSE) +
+  geom_line(aes(group = subject_id, color = subject_id), show.legend = FALSE) +
+  geom_point(aes(group = subject_id, color = subject_id), show.legend = FALSE) +
   geom_signif(
     comparisons = list(c("T1", "T2")),
     map_signif_level = TRUE,
@@ -619,10 +605,69 @@ plot <-
 
 plot
 
-ggsave(plot,
-       filename = "age_AccelResid.pdf",
-       width = 7,
-       height = 6)
+
+
+# ggsave(plot,
+#        filename = "age_AccelResid.pdf",
+#        width = 7,
+#        height = 6)
+
+library(tidyr)
+###only remain the participants with T1 and T2
+temp_subject_id <-
+temp_data2 %>%
+  dplyr::filter(!is.na(AgeAccelResid)) %>% 
+  plyr::dlply(.variables = .(subject_id)) %>%
+  purrr::map(function(x) {
+    x$AgeAccelResid[x$time_point == "T2"] - x$AgeAccelResid[x$time_point == "T1"]
+  }) %>%
+  unlist() %>% 
+  names()
+
+temp <-
+  temp_data2 %>%
+  dplyr::filter(subject_id %in% temp_subject_id) %>%
+  dplyr::filter(!is.na(AgeAccelResid))
+
+temp <-
+  temp %>%
+  dplyr::filter(!is.na(AgeAccelResid)) %>% 
+  plyr::dlply(.variables = .(subject_id)) %>%
+  purrr::map(function(x) {
+    x$AgeAccelResid[x$time_point == "T2"] - x$AgeAccelResid[x$time_point == "T1"]
+  }) %>%
+  unlist()
+
+length(temp)
+
+sum(temp < 0)
+length(temp)
+
+temp <-
+  temp_data2 %>%
+  dplyr::filter(subject_id %in% temp_subject_id) %>%
+  dplyr::filter(!is.na(AgeAccelResid))
+t.test(
+  temp %>% 
+    dplyr::filter(time_point == "T1") %>%
+    dplyr::arrange(subject_id) %>% 
+    pull(AgeAccelResid),
+  temp %>% 
+    dplyr::filter(time_point == "T2") %>%
+    dplyr::arrange(subject_id) %>% 
+    pull(AgeAccelResid)
+)
+
+t.test(
+  temp %>% 
+    dplyr::filter(time_point == "T1") %>%
+    dplyr::arrange(subject_id) %>% 
+    pull(AgeAccelResid),
+  temp %>% 
+    dplyr::filter(time_point == "T3") %>%
+    dplyr::arrange(subject_id) %>% 
+    pull(AgeAccelResid)
+)
 
 
 plot <-
@@ -632,18 +677,14 @@ plot <-
     temp_data$subject_id
   ), numeric = TRUE))) %>%
   ggplot(aes(time_point, AgeAccelResid)) +
-  geom_line(aes(group = subject_id,
-                color = subject_id),
-            show.legend = FALSE) +
-  geom_point(aes(group = subject_id,
-                 color = subject_id),
-             show.legend = FALSE) +
+  geom_line(aes(group = subject_id, color = subject_id), show.legend = FALSE) +
+  geom_point(aes(group = subject_id, color = subject_id), show.legend = FALSE) +
   theme_bw() +
   labs(x = "") +
   theme(panel.grid.minor = element_blank()) +
   facet_wrap(facets = vars(subject_id))
-
-ggsave(plot,
-       filename = "age_AccelResid_for_each_participant.pdf",
-       width = 7,
-       height = 6)
+plot
+# ggsave(plot,
+#        filename = "age_AccelResid_for_each_participant.pdf",
+#        width = 7,
+#        height = 6)

@@ -15,11 +15,11 @@ load("3-data_analysis/Cardiovascular_Risk_Panel/data_preparation/variable_info")
 load("3-data_analysis/Cardiovascular_Risk_Panel/marker/depression_association_pos")
 load("3-data_analysis/Cardiovascular_Risk_Panel/marker/depression_association_neg")
 
-expression_data[1,] =
-  scale(as.numeric(expression_data[1,])) %>% 
+expression_data[1, ] =
+  scale(as.numeric(expression_data[1, ])) %>%
   as.numeric()
 
-range(expression_data)  
+range(expression_data)
 
 depression_association_pos$Variables
 depression_association_neg$Variables
@@ -31,7 +31,7 @@ expression_data_cardopanel <-
   expression_data[marker_name, ]
 
 variable_info_cardopanel <-
-  variable_info[match(marker_name, variable_info$variable_id), , drop = FALSE] %>% 
+  variable_info[match(marker_name, variable_info$variable_id), , drop = FALSE] %>%
   dplyr::mutate(class = "Cardiopanel")
 
 
@@ -55,7 +55,7 @@ expression_data_cytokine <-
   expression_data[marker_name, ]
 
 variable_info_cytokine <-
-  variable_info[match(marker_name, variable_info$variable_id), ,drop = FALSE] %>% 
+  variable_info[match(marker_name, variable_info$variable_id), , drop = FALSE] %>%
   dplyr::mutate(class = "Cytokine")
 
 range(expression_data_cytokine)
@@ -80,7 +80,7 @@ expression_data_lipid <-
   expression_data[marker_name, ]
 
 variable_info_lipid <-
-  variable_info[match(marker_name, variable_info$variable_id), ,drop = FALSE] %>% 
+  variable_info[match(marker_name, variable_info$variable_id), , drop = FALSE] %>%
   dplyr::mutate(class = "Lipid")
 
 range(expression_data_lipid)
@@ -105,13 +105,15 @@ expression_data_metabolic_panel <-
   expression_data[marker_name, ]
 
 variable_info_metabolic_panel <-
-  variable_info[match(marker_name, variable_info$variable_id), ,drop = FALSE] %>% 
+  variable_info[match(marker_name, variable_info$variable_id), , drop = FALSE] %>%
   dplyr::mutate(class = "Metabolic_panel")
 
 range(expression_data_metabolic_panel)
 
 ###metabolomics
-load("3-data_analysis/metabolomics_data/data_preparation/metabolites/expression_data")
+load(
+  "3-data_analysis/metabolomics_data/data_preparation/metabolites/expression_data"
+)
 load("3-data_analysis/metabolomics_data/data_preparation/metabolites/sample_info")
 load("3-data_analysis/metabolomics_data/data_preparation/metabolites/variable_info")
 
@@ -127,12 +129,12 @@ marker_name = c(depression_association_pos$Variables,
 marker_name
 
 expression_data_metabolomics <-
-  expression_data[marker_name, ] %>% 
+  expression_data[marker_name, ] %>%
   dplyr::filter(!is.na(`1_T1`))
 
 variable_info_metabolomics <-
-  variable_info[match(marker_name, variable_info$variable_id), ,drop = FALSE] %>% 
-  dplyr::filter(!is.na(variable_id)) %>% 
+  variable_info[match(marker_name, variable_info$variable_id), , drop = FALSE] %>%
+  dplyr::filter(!is.na(variable_id)) %>%
   dplyr::mutate(class = "Metabolomics")
 
 rownames(expression_data_metabolomics) == variable_info_metabolomics$variable_id
@@ -142,53 +144,53 @@ range(expression_data_metabolomics)
 setwd(r4projects::get_project_wd())
 setwd("3-data_analysis/multi_omics/k_means/")
 
-intersect_name <- 
-  Reduce(f = intersect, x = list(colnames(expression_data_cardopanel),
-                                 colnames(expression_data_cytokine),
-                                 colnames(expression_data_lipid),
-                                 colnames(expression_data_metabolic_panel),
-                                 colnames(expression_data_metabolomics)))
+intersect_name <-
+  Reduce(f = intersect,
+         x = list(
+           colnames(expression_data_cardopanel),
+           colnames(expression_data_cytokine),
+           colnames(expression_data_lipid),
+           colnames(expression_data_metabolic_panel),
+           colnames(expression_data_metabolomics)
+         ))
 expression_data <-
-  rbind(expression_data_cardopanel[, intersect_name],
-        expression_data_cytokine[, intersect_name],
-        expression_data_lipid[, intersect_name],
-        expression_data_metabolic_panel[, intersect_name],
-        expression_data_metabolomics[, intersect_name])
+  rbind(
+    expression_data_cardopanel[, intersect_name],
+    expression_data_cytokine[, intersect_name],
+    expression_data_lipid[, intersect_name],
+    expression_data_metabolic_panel[, intersect_name],
+    expression_data_metabolomics[, intersect_name]
+  )
 
-variable_info <- 
+variable_info <-
   variable_info_cardopanel %>%
-  dplyr::full_join(variable_info_cytokine, 
-                   by = intersect(colnames(variable_info_cardopanel), 
-                                  colnames(variable_info_cytokine))) %>% 
-  dplyr::full_join(variable_info_lipid, 
-                   by = intersect(colnames(.), 
-                                  colnames(variable_info_lipid))) %>% 
-  dplyr::full_join(variable_info_metabolic_panel, 
-                   by = intersect(colnames(.), 
-                                  colnames(variable_info_metabolic_panel))) %>% 
-  dplyr::full_join(variable_info_metabolomics, 
-                   by = intersect(colnames(.), 
-                                  colnames(variable_info_metabolomics)))
+  dplyr::full_join(variable_info_cytokine, by = intersect(
+    colnames(variable_info_cardopanel),
+    colnames(variable_info_cytokine)
+  )) %>%
+  dplyr::full_join(variable_info_lipid, by = intersect(colnames(.), colnames(variable_info_lipid))) %>%
+  dplyr::full_join(variable_info_metabolic_panel, by = intersect(colnames(.), colnames(variable_info_metabolic_panel))) %>%
+  dplyr::full_join(variable_info_metabolomics, by = intersect(colnames(.), colnames(variable_info_metabolomics)))
 
 variable_info$mol_name = variable_info$Metabolite
-variable_info$mol_name[is.na(variable_info$mol_name)] = 
+variable_info$mol_name[is.na(variable_info$mol_name)] =
   variable_info$variable_id[is.na(variable_info$mol_name)]
 
 sample_info <-
-  sample_info[match(colnames(expression_data), sample_info$sample_id),]
+  sample_info[match(colnames(expression_data), sample_info$sample_id), ]
 
 
 dim(expression_data)
 dim(sample_info)
 dim(variable_info)
 
-# as.data.frame(t(expression_data)) %>% 
+# as.data.frame(t(expression_data)) %>%
 # purrr::map(function(x){
-# data.frame(sample_info, x) %>% 
-#     dplyr::mutate(subject_id = as.character(subject_id)) %>% 
+# data.frame(sample_info, x) %>%
+#     dplyr::mutate(subject_id = as.character(subject_id)) %>%
 #     ggplot(aes(x, bdi_total)) +
-#     geom_point(aes(fill = subject_id), 
-#                shape = 21, 
+#     geom_point(aes(fill = subject_id),
+#                shape = 21,
 #                size = 3,
 #                show.legend = FALSE) +
 #     geom_smooth(aes(fill = subject_id), method = "lm") +
@@ -263,10 +265,11 @@ plot <-
 
 plot <-
   plot %>%
-  data.frame(distance = plot,
-             k = seq(2, 22, 1)) %>%
+  data.frame(distance = plot, k = seq(2, 22, 1)) %>%
   ggplot(aes(k, distance)) +
-  geom_point(shape = 21, size = 4, fill = "black") +
+  geom_point(shape = 21,
+             size = 4,
+             fill = "black") +
   # geom_smooth() +
   geom_segment(aes(
     x = k,
@@ -285,8 +288,7 @@ plot <-
     plot.background = element_rect(fill = "transparent", color = NA),
     legend.background = element_rect(fill = "transparent", color = NA)
   ) +
-  labs(x = "Cluster number",
-       y = "Min. centroid distance") +
+  labs(x = "Cluster number", y = "Min. centroid distance") +
   scale_y_continuous(expand = expansion(mult = c(0, 0.1)))
 
 plot
@@ -396,9 +398,7 @@ cluster_info <-
   ) %>%
   arrange(cluster)
 
-xlsx::write.xlsx(cluster_info,
-                 "cluster_info.xlsx",
-                 row.names = FALSE)
+xlsx::write.xlsx(cluster_info, "cluster_info.xlsx", row.names = FALSE)
 
 ####plot for each cluster
 idx <- 1
@@ -409,43 +409,42 @@ for (idx in 1:4) {
     cluster_info %>%
     dplyr::filter(cluster == idx) %>%
     dplyr::select(1, 1 + idx, cluster)
-
+  
   colnames(cluster_data)[2] <- c("membership")
-
+  
   cluster_data <-
     cluster_data %>%
     dplyr::filter(membership > 0.5)
-
+  
   path <- paste("cluster", idx, sep = "_")
   dir.create(path)
-
+  
   xlsx::write.xlsx(cluster_data,
                    file = file.path(path, paste("cluster", idx, ".xlsx", sep = "")),
                    row.names = FALSE)
-
+  
   temp_center <-
     centers[idx, , drop = TRUE] %>%
     data.frame(time = names(.),
                value = .,
                stringsAsFactors = FALSE) %>%
     dplyr::mutate(time = factor(time, levels = time))
-
-  temp = 
-  temp_data[cluster_data$variable_id,] %>%
+  
+  temp =
+    temp_data[cluster_data$variable_id, ] %>%
     data.frame(
       membership = cluster_data$membership,
       .,
       stringsAsFactors = FALSE,
       check.names = FALSE
     ) %>%
-    tibble::rownames_to_column(var = "variable_id") 
+    tibble::rownames_to_column(var = "variable_id")
   
   temp$class =
-    variable_info$class[match(temp$variable_id,
-          variable_info$variable_id)]
+    variable_info$class[match(temp$variable_id, variable_info$variable_id)]
   
   plot <-
-   temp %>%
+    temp %>%
     tidyr::pivot_longer(
       cols = -c(variable_id, membership, class),
       names_to = "time",
@@ -476,21 +475,16 @@ for (idx in 1:4) {
     labs(
       x = "",
       y = "Z-score",
-      title = paste("Cluster ",
-                    idx,
-                    " (",
-                    nrow(cluster_data),
-                    " moleculars)",
-                    sep = "")
+      title = paste("Cluster ", idx, " (", nrow(cluster_data), " moleculars)", sep = "")
     ) +
     geom_line(
       mapping = aes(time, value, group = 1),
       data = temp_center,
       size = 2
     )
-
+  
   plot
-
+  
   ggsave(
     plot,
     filename = file.path(path, paste("cluster", idx, ".pdf", sep = "")),
@@ -588,10 +582,12 @@ dim(cluster4)
 library(ComplexHeatmap)
 
 temp_data <-
-  temp_data_mean[c(cluster2$variable_id,
-                   cluster1$variable_id,
-                   cluster3$variable_id,
-                   cluster4$variable_id),]
+  temp_data_mean[c(
+    cluster2$variable_id,
+    cluster1$variable_id,
+    cluster3$variable_id,
+    cluster4$variable_id
+  ), ]
 
 temp_data <-
   apply(temp_data, 1, function(x) {
@@ -606,29 +602,25 @@ rownames(temp_data) <-
 pal <-
   wesanderson::wes_palette(name = "Rushmore1", n = 100, type = "continuous")
 
-  # wesanderson::wes_palette(name = "Zissou1", n = 100, type = "continuous")
+# wesanderson::wes_palette(name = "Zissou1", n = 100, type = "continuous")
 
 range(temp_data)
 library(circlize)
 col_fun = colorRamp2(c(-2, 0, 2), c(pal[1], "white", pal[100]))
 
 cluster <-
-  c(rep(2, nrow(cluster2)),
-    rep(1, nrow(cluster1)),
-    rep(3, nrow(cluster3)),
-    rep(4, nrow(cluster4)))
+  c(rep(2, nrow(cluster2)), rep(1, nrow(cluster1)), rep(3, nrow(cluster3)), rep(4, nrow(cluster4)))
 
 cluster_color <-
   c(ggsci::pal_lancet()(n = 10)[1:4])
 
 names(cluster_color) <- c(as.character(1:4))
 
-text_color <- 
+text_color <-
   cluster_color[cluster]
 
 ha <-
-  rowAnnotation(Cluster = cluster,
-                col = list(Cluster = cluster_color))
+  rowAnnotation(Cluster = cluster, col = list(Cluster = cluster_color))
 
 plot <-
   Heatmap(
@@ -638,9 +630,8 @@ plot <-
     show_row_names = FALSE,
     border = TRUE,
     row_names_side = "left",
-    row_names_gp = gpar(fontsize = 7, 
-                        col = text_color),
-    col = col_fun,
+    row_names_gp = gpar(fontsize = 7, col = text_color),
+    # col = col_fun,
     right_annotation = ha,
     name = "Z score",
     column_names_rot = 0
@@ -668,7 +659,7 @@ ggsave(
 
 ###heatmap for cluster 1
 temp_data <-
-  temp_data_mean[c(cluster1$variable_id),]
+  temp_data_mean[c(cluster1$variable_id), ]
 
 temp_data <-
   apply(temp_data, 1, function(x) {
@@ -692,9 +683,8 @@ plot <-
     show_row_names = TRUE,
     border = TRUE,
     row_names_side = "left",
-    row_names_gp = gpar(fontsize = 7, 
-                        col = text_color),
-    col = col_fun,
+    row_names_gp = gpar(fontsize = 7, col = text_color),
+    # col = col_fun,
     name = "Z score",
     column_names_rot = 0
   )
@@ -721,7 +711,7 @@ ggsave(
 
 ###heatmap for cluster 2
 temp_data <-
-  temp_data_mean[c(cluster2$variable_id),]
+  temp_data_mean[c(cluster2$variable_id), ]
 
 temp_data <-
   apply(temp_data, 1, function(x) {
@@ -745,9 +735,8 @@ plot <-
     show_row_names = TRUE,
     border = TRUE,
     row_names_side = "left",
-    row_names_gp = gpar(fontsize = 7, 
-                        col = text_color),
-    col = col_fun,
+    row_names_gp = gpar(fontsize = 7, col = text_color),
+    # col = col_fun,
     name = "Z score",
     column_names_rot = 0
   )
@@ -775,7 +764,7 @@ ggsave(
 
 ###heatmap for cluster 3
 temp_data <-
-  temp_data_mean[c(cluster3$variable_id),]
+  temp_data_mean[c(cluster3$variable_id), ]
 
 temp_data <-
   apply(temp_data, 1, function(x) {
@@ -799,9 +788,8 @@ plot <-
     show_row_names = TRUE,
     border = TRUE,
     row_names_side = "left",
-    row_names_gp = gpar(fontsize = 7, 
-                        col = text_color),
-    col = col_fun,
+    row_names_gp = gpar(fontsize = 7, col = text_color),
+    # col = col_fun,
     name = "Z score",
     column_names_rot = 0
   )
@@ -827,7 +815,7 @@ ggsave(
 
 ###heatmap for cluster 4
 temp_data <-
-  temp_data_mean[c(cluster4$variable_id),]
+  temp_data_mean[c(cluster4$variable_id), ]
 
 temp_data <-
   apply(temp_data, 1, function(x) {
@@ -851,9 +839,8 @@ plot <-
     show_row_names = TRUE,
     border = TRUE,
     row_names_side = "left",
-    row_names_gp = gpar(fontsize = 7, 
-                        col = text_color),
-    col = col_fun,
+    row_names_gp = gpar(fontsize = 7, col = text_color),
+    # col = col_fun,
     name = "Z score",
     column_names_rot = 0
   )
@@ -892,7 +879,7 @@ ggsave(
 # metabolome_subject_data_sem <-
 #   subject_data_sem
 # metabolome_fc_p <- fc_p_value
-# 
+#
 # load("data/shake_study/lipidomics_data_analysis/DEG/subject_data_mean")
 # load("data/shake_study/lipidomics_data_analysis/DEG/subject_data_sd")
 # load("data/shake_study/lipidomics_data_analysis/DEG/subject_data_sem")
@@ -904,7 +891,7 @@ ggsave(
 # lipidomics_subject_data_sem <-
 #   subject_data_sem
 # lipidomics_fc_p <- fc_p_value
-# 
+#
 # load("data/shake_study/cytokine_data_analysis/DEG/subject_data_mean")
 # load("data/shake_study/cytokine_data_analysis/DEG/subject_data_sd")
 # load("data/shake_study/cytokine_data_analysis/DEG/subject_data_sem")
@@ -916,35 +903,35 @@ ggsave(
 # cytokine_subject_data_sem <-
 #   subject_data_sem
 # cytokine_fc_p <- fc_p_value
-# 
+#
 # setwd("data/shake_study/3_omics/k_means_clustering/")
-# 
+#
 # ##metabolomics
-# cluster1_metabolite <- 
-#   variable_info %>% 
-#   dplyr::filter(variable_id %in% cluster1$variable_id) %>% 
+# cluster1_metabolite <-
+#   variable_info %>%
+#   dplyr::filter(variable_id %in% cluster1$variable_id) %>%
 #   dplyr::filter(variable_id %in% variable_info1$variable_id)
-# 
-# cluster2_metabolite <- 
-#   variable_info %>% 
-#   dplyr::filter(variable_id %in% cluster2$variable_id) %>% 
+#
+# cluster2_metabolite <-
+#   variable_info %>%
+#   dplyr::filter(variable_id %in% cluster2$variable_id) %>%
 #   dplyr::filter(variable_id %in% variable_info1$variable_id)
-# 
-# cluster3_metabolite <- 
-#   variable_info %>% 
-#   dplyr::filter(variable_id %in% cluster3$variable_id) %>% 
+#
+# cluster3_metabolite <-
+#   variable_info %>%
+#   dplyr::filter(variable_id %in% cluster3$variable_id) %>%
 #   dplyr::filter(variable_id %in% variable_info1$variable_id)
-# 
-# non_cluster_metabolite <- 
-#   variable_info %>% 
-#   dplyr::filter(variable_id %in% non_metabolite) %>% 
+#
+# non_cluster_metabolite <-
+#   variable_info %>%
+#   dplyr::filter(variable_id %in% non_metabolite) %>%
 #   dplyr::filter(variable_id %in% variable_info1$variable_id)
-# 
+#
 # cluster1_metabolite$Metabolite
 # cluster2_metabolite$Metabolite
 # cluster3_metabolite$Metabolite
 # non_cluster_metabolite$Metabolite
-# 
+#
 # ####get the KEGG ID and HMDB ID
 # cluster1_metabolite$Metabolite
 # cluster1_metabolite$HMDB
@@ -952,11 +939,11 @@ ggsave(
 # # write.csv(cluster1_metabolite, "cluster_1/cluster1_metabolite.csv", row.names = FALSE)
 # # write.csv(cluster2_metabolite, "cluster_2/cluster2_metabolite.csv", row.names = FALSE)
 # # write.csv(cluster3_metabolite, "cluster_3/cluster3_metabolite.csv", row.names = FALSE)
-# 
+#
 # ###cluster2
-# cluster2_path <- 
+# cluster2_path <-
 #   readr::read_csv("cluster_2/pathway_enrichment/pathway_results.csv")
-# 
+#
 # plot <-
 #   cluster2_path %>%
 #   dplyr::mutate(fdr = -log(p.adjust(`Raw p`, method = "fdr"), 10)) %>%
@@ -980,12 +967,12 @@ ggsave(
 #   )
 # plot
 # # ggsave(plot, filename = "cluster_2/cluster2_pathway.pdf", width = 8, height = 7)
-# 
-# 
+#
+#
 # ###cluster3
-# cluster3_path <- 
+# cluster3_path <-
 #   readr::read_csv("cluster_3/pathway_enrichment/pathway_results.csv")
-# 
+#
 # plot <-
 #   cluster3_path %>%
 #   dplyr::mutate(fdr = -log(p.adjust(`Raw p`, method = "fdr"), 10)) %>%
@@ -1009,70 +996,70 @@ ggsave(
 #   )
 # plot
 # # ggsave(plot, filename = "cluster_3/cluster3_pathway.pdf", width = 8, height = 7)
-# 
-# 
+#
+#
 # ###functional annotation for different cluster
 # #lipidomics
-# cluster1_lipid <- 
-#   variable_info %>% 
-#   dplyr::filter(variable_id %in% cluster1$variable_id) %>% 
+# cluster1_lipid <-
+#   variable_info %>%
+#   dplyr::filter(variable_id %in% cluster1$variable_id) %>%
 #   dplyr::filter(variable_id %in% variable_info2$variable_id)
-# 
-# cluster2_lipid <- 
-#   variable_info %>% 
-#   dplyr::filter(variable_id %in% cluster2$variable_id) %>% 
+#
+# cluster2_lipid <-
+#   variable_info %>%
+#   dplyr::filter(variable_id %in% cluster2$variable_id) %>%
 #   dplyr::filter(variable_id %in% variable_info2$variable_id)
-# 
-# cluster3_lipid <- 
-#   variable_info %>% 
-#   dplyr::filter(variable_id %in% cluster3$variable_id) %>% 
+#
+# cluster3_lipid <-
+#   variable_info %>%
+#   dplyr::filter(variable_id %in% cluster3$variable_id) %>%
 #   dplyr::filter(variable_id %in% variable_info2$variable_id)
-# 
-# non_cluster_lipid <- 
-#   variable_info %>% 
-#   dplyr::filter(variable_id %in% non_metabolite) %>% 
+#
+# non_cluster_lipid <-
+#   variable_info %>%
+#   dplyr::filter(variable_id %in% non_metabolite) %>%
 #   dplyr::filter(variable_id %in% variable_info2$variable_id)
-# 
+#
 # cluster1_lipid$mol_name
 # cluster2_lipid$mol_name
 # cluster3_lipid$mol_name
 # non_cluster_lipid$mol_name
-# 
-# 
+#
+#
 # ###lipid class changes
-# 
-# 
+#
+#
 # # getwd()
 # # write.csv(cluster1_lipid, "cluster_1/cluster1_lipid.csv", row.names = FALSE)
 # # write.csv(cluster2_lipid, "cluster_2/cluster2_lipid.csv", row.names = FALSE)
 # # write.csv(cluster3_lipid, "cluster_3/cluster3_lipid.csv", row.names = FALSE)
-# 
-# 
-# 
-# 
+#
+#
+#
+#
 # ###functional annotation for different cluster
 # color <- ggsci::pal_futurama()(n=10)[1:5]
 # names(color) <- c("SM", "CE", "DAG", "TAG", "FFA")
-# 
+#
 # temp1 <-
 #   cluster1_lipid %>%
 #   dplyr::pull(subclass) %>%
 #   table() %>%
 #   as.data.frame()
-# 
+#
 # colnames(temp1)[1] <- "class"
-# 
-# temp1 <- 
+#
+# temp1 <-
 #   temp1 %>%
-#   dplyr::arrange(Freq) %>% 
-#   dplyr::mutate(class = factor(class, levels = class)) %>% 
-#   dplyr::mutate(Freq = Freq * 100/sum(Freq)) %>% 
+#   dplyr::arrange(Freq) %>%
+#   dplyr::mutate(class = factor(class, levels = class)) %>%
+#   dplyr::mutate(Freq = Freq * 100/sum(Freq)) %>%
 #   mutate(prop = round(Freq / sum(Freq) * 100, 2)) %>%
 #   mutate(ypos = cumsum(prop) - 0.5 * prop)
-# 
+#
 # library(scales)
-# 
-# plot1 <- 
+#
+# plot1 <-
 #   temp1 %>%
 #   ggplot(aes(x = "", y = Freq, fill = class)) +
 #   geom_bar(width = 1,
@@ -1082,31 +1069,31 @@ ggsave(
 #   scale_fill_manual(values = color) +
 #   geom_text(aes(y = ypos, label = prop), color = "white", size=6) +
 #   theme_void() +
-#   coord_polar("y", start = 0) 
-# 
-# plot1  
-# 
+#   coord_polar("y", start = 0)
+#
+# plot1
+#
 # # ggsave(plot1, filename = "cluster_1/cluster1_annotation.pdf", width = 7, height = 7)
-# 
+#
 # temp2 <-
-#   cluster2_lipid %>% 
+#   cluster2_lipid %>%
 #   dplyr::pull(subclass) %>%
 #   table() %>%
 #   as.data.frame()
-# 
+#
 # colnames(temp2)[1] <- "class"
-# 
-# temp2 <- 
+#
+# temp2 <-
 #   temp2 %>%
-#   dplyr::arrange(Freq) %>% 
-#   dplyr::mutate(class = factor(class, levels = class)) %>% 
-#   dplyr::mutate(Freq = Freq * 100/sum(Freq)) %>% 
+#   dplyr::arrange(Freq) %>%
+#   dplyr::mutate(class = factor(class, levels = class)) %>%
+#   dplyr::mutate(Freq = Freq * 100/sum(Freq)) %>%
 #   mutate(prop = round(Freq / sum(Freq) * 100, 2)) %>%
 #   mutate(ypos = cumsum(prop) - 0.5 * prop)
-# 
+#
 # library(scales)
-# 
-# plot2 <- 
+#
+# plot2 <-
 #   temp2 %>%
 #   ggplot(aes(x = "", y = prop, fill = class)) +
 #   geom_bar(width = 1,
@@ -1116,31 +1103,31 @@ ggsave(
 #   scale_fill_manual(values = color) +
 #   coord_polar("y", start = 0) +
 #   geom_text(aes(y = ypos, label = prop), color = "white", size=6) +
-#   theme_void() 
-# 
+#   theme_void()
+#
 # plot2
-# 
+#
 # # ggsave(plot2, filename = "cluster_2/cluster2_annotation.pdf", width = 7, height = 7)
-# 
+#
 # temp3 <-
 #   cluster3_lipid %>%
 #   dplyr::pull(subclass) %>%
 #   table() %>%
 #   as.data.frame()
-# 
+#
 # colnames(temp3)[1] <- "class"
-# 
-# temp3 <- 
+#
+# temp3 <-
 #   temp3 %>%
-#   dplyr::arrange(Freq) %>% 
-#   dplyr::mutate(class = factor(class, levels = class)) %>% 
-#   dplyr::mutate(Freq = Freq * 100/sum(Freq)) %>% 
+#   dplyr::arrange(Freq) %>%
+#   dplyr::mutate(class = factor(class, levels = class)) %>%
+#   dplyr::mutate(Freq = Freq * 100/sum(Freq)) %>%
 #   mutate(prop = round(Freq / sum(Freq) * 100, 2)) %>%
 #   mutate(ypos = cumsum(prop) - 0.5 * prop)
-# 
+#
 # library(scales)
-# 
-# plot3 <- 
+#
+# plot3 <-
 #   temp3 %>%
 #   ggplot(aes(x = "", y = prop, fill = class)) +
 #   geom_bar(width = 1,
@@ -1150,70 +1137,70 @@ ggsave(
 #   scale_fill_manual(values = color) +
 #   coord_polar("y", start = 0) +
 #   geom_text(aes(y = ypos, label = prop), color = "white", size=6) +
-#   theme_void() 
-# 
+#   theme_void()
+#
 # plot3
-# 
+#
 # # ggsave(plot3, filename = "cluster3_annotation.pdf", width = 7, height = 7)
-# 
+#
 # ###functional annotation for different cluster
 # #cytokine
-# cluster1_cytokine <- 
-#   variable_info %>% 
-#   dplyr::filter(variable_id %in% cluster1$variable_id) %>% 
+# cluster1_cytokine <-
+#   variable_info %>%
+#   dplyr::filter(variable_id %in% cluster1$variable_id) %>%
 #   dplyr::filter(variable_id %in% variable_info3$variable_id)
-# 
-# cluster2_cytokine <- 
-#   variable_info %>% 
-#   dplyr::filter(variable_id %in% cluster2$variable_id) %>% 
+#
+# cluster2_cytokine <-
+#   variable_info %>%
+#   dplyr::filter(variable_id %in% cluster2$variable_id) %>%
 #   dplyr::filter(variable_id %in% variable_info3$variable_id)
-# 
-# cluster3_cytokine <- 
-#   variable_info %>% 
-#   dplyr::filter(variable_id %in% cluster3$variable_id) %>% 
+#
+# cluster3_cytokine <-
+#   variable_info %>%
+#   dplyr::filter(variable_id %in% cluster3$variable_id) %>%
 #   dplyr::filter(variable_id %in% variable_info3$variable_id)
-# 
-# non_cluster_cytokine <- 
-#   variable_info %>% 
-#   dplyr::filter(variable_id %in% non_metabolite) %>% 
+#
+# non_cluster_cytokine <-
+#   variable_info %>%
+#   dplyr::filter(variable_id %in% non_metabolite) %>%
 #   dplyr::filter(variable_id %in% variable_info3$variable_id)
-# 
+#
 # cluster1_cytokine$mol_name
 # cluster2_cytokine$mol_name
 # cluster3_cytokine$mol_name
 # non_cluster_cytokine$mol_name
-# 
+#
 # getwd()
 # # write.csv(cluster1_cytokine, "cluster_1/cluster1_cytokine.csv", row.names = FALSE)
 # # write.csv(cluster2_cytokine, "cluster_2/cluster2_cytokine.csv", row.names = FALSE)
 # # write.csv(cluster3_cytokine, "cluster_3/cluster3_cytokine.csv", row.names = FALSE)
-# 
-# idx <- 
-#   match(cluster3_cytokine$variable_id, 
+#
+# idx <-
+#   match(cluster3_cytokine$variable_id,
 #         rownames(cytokine_subject_data_mean))
-# 
-# mean_value <- 
+#
+# mean_value <-
 #   cytokine_subject_data_mean[idx, ] %>%
 #   as.data.frame() %>%
 #   tibble::rownames_to_column(var = "variable_id") %>%
 #   tidyr::pivot_longer(cols = -variable_id,
 #                       names_to = "TP",
 #                       values_to = "mean")
-# 
-# sem_value <- 
+#
+# sem_value <-
 #   cytokine_subject_data_sem[idx, ] %>%
 #   as.data.frame() %>%
 #   tibble::rownames_to_column(var = "variable_id") %>%
 #   tidyr::pivot_longer(cols = -variable_id,
 #                       names_to = "TP",
 #                       values_to = "sem")
-# 
-# plot <- 
+#
+# plot <-
 #   mean_value %>%
 #   dplyr::left_join(sem_value, by = c("variable_id", "TP")) %>%
 #   dplyr::mutate(TP = factor(as.character(TP),
-#                             levels = c("0", "30", "60", "120", "240"))) %>% 
-#   dplyr::left_join(variable_info3, by = "variable_id") %>% 
+#                             levels = c("0", "30", "60", "120", "240"))) %>%
+#   dplyr::left_join(variable_info3, by = "variable_id") %>%
 #   ggplot(aes(TP, mean, group = mol_name)) +
 #   geom_line(aes(color = mol_name)) +
 #   geom_errorbar(aes(ymin = mean - sem, ymax = mean + sem,
@@ -1230,43 +1217,43 @@ ggsave(
 #     panel.background = element_rect(fill = "transparent", color = NA),
 #     plot.background = element_rect(fill = "transparent", color = NA),
 #     legend.background = element_rect(fill = "transparent", color = NA)
-#   ) 
-# 
+#   )
+#
 # plot
-# 
+#
 # # ggsave(plot, filename = "cluster_3/cluster3_cytokine_plot.pdf", width = 9, height = 7)
-# 
-# 
+#
+#
 # ##amino acid
-# amino_acid_variable_id <- 
+# amino_acid_variable_id <-
 #   cluster3_metabolite$variable_id[c(1, 2, 3, 10, 12, 17, 19, 33, 39)]
-# 
-# idx <- 
-#   match(amino_acid_variable_id, 
+#
+# idx <-
+#   match(amino_acid_variable_id,
 #         rownames(metabolome_subject_data_mean))
-# 
-# mean_value <- 
+#
+# mean_value <-
 #   metabolome_subject_data_mean[idx, ] %>%
 #   as.data.frame() %>%
 #   tibble::rownames_to_column(var = "variable_id") %>%
 #   tidyr::pivot_longer(cols = -variable_id,
 #                       names_to = "TP",
 #                       values_to = "mean")
-# 
-# sem_value <- 
+#
+# sem_value <-
 #   metabolome_subject_data_sem[idx, ] %>%
 #   as.data.frame() %>%
 #   tibble::rownames_to_column(var = "variable_id") %>%
 #   tidyr::pivot_longer(cols = -variable_id,
 #                       names_to = "TP",
 #                       values_to = "sem")
-# 
-# plot <- 
+#
+# plot <-
 #   mean_value %>%
 #   dplyr::left_join(sem_value, by = c("variable_id", "TP")) %>%
 #   dplyr::mutate(TP = factor(as.character(TP),
-#                             levels = c("0", "30", "60", "120", "240"))) %>% 
-#   dplyr::left_join(variable_info1, by = "variable_id") %>% 
+#                             levels = c("0", "30", "60", "120", "240"))) %>%
+#   dplyr::left_join(variable_info1, by = "variable_id") %>%
 #   ggplot(aes(TP, mean, group = Metabolite)) +
 #   geom_line(aes(color = Metabolite)) +
 #   geom_errorbar(aes(ymin = mean - sem, ymax = mean + sem,
@@ -1283,45 +1270,45 @@ ggsave(
 #     panel.background = element_rect(fill = "transparent", color = NA),
 #     plot.background = element_rect(fill = "transparent", color = NA),
 #     legend.background = element_rect(fill = "transparent", color = NA)
-#   ) 
-# 
+#   )
+#
 # plot
 # # ggsave(plot, filename = "cluster_3/amino_acid_plot.pdf", width = 9, height = 7)
-# 
-# 
-# 
-# 
-# 
+#
+#
+#
+#
+#
 # ##amino acid
-# amino_acid_variable_id <- 
+# amino_acid_variable_id <-
 #   cluster3_metabolite$variable_id[c(1, 2, 3, 10, 12, 17, 19, 33, 39)]
-# 
-# idx <- 
-#   match(amino_acid_variable_id, 
+#
+# idx <-
+#   match(amino_acid_variable_id,
 #         rownames(metabolome_subject_data_mean))
-# 
-# mean_value <- 
+#
+# mean_value <-
 #   metabolome_subject_data_mean[idx, ] %>%
 #   as.data.frame() %>%
 #   tibble::rownames_to_column(var = "variable_id") %>%
 #   tidyr::pivot_longer(cols = -variable_id,
 #                       names_to = "TP",
 #                       values_to = "mean")
-# 
-# sem_value <- 
+#
+# sem_value <-
 #   metabolome_subject_data_sem[idx, ] %>%
 #   as.data.frame() %>%
 #   tibble::rownames_to_column(var = "variable_id") %>%
 #   tidyr::pivot_longer(cols = -variable_id,
 #                       names_to = "TP",
 #                       values_to = "sem")
-# 
-# plot <- 
+#
+# plot <-
 #   mean_value %>%
 #   dplyr::left_join(sem_value, by = c("variable_id", "TP")) %>%
 #   dplyr::mutate(TP = factor(as.character(TP),
-#                             levels = c("0", "30", "60", "120", "240"))) %>% 
-#   dplyr::left_join(variable_info1, by = "variable_id") %>% 
+#                             levels = c("0", "30", "60", "120", "240"))) %>%
+#   dplyr::left_join(variable_info1, by = "variable_id") %>%
 #   ggplot(aes(TP, mean, group = Metabolite)) +
 #   geom_line(aes(color = Metabolite)) +
 #   geom_errorbar(aes(ymin = mean - sem, ymax = mean + sem,
@@ -1338,42 +1325,42 @@ ggsave(
 #     panel.background = element_rect(fill = "transparent", color = NA),
 #     plot.background = element_rect(fill = "transparent", color = NA),
 #     legend.background = element_rect(fill = "transparent", color = NA)
-#   ) 
-# 
+#   )
+#
 # plot
 # # ggsave(plot, filename = "cluster_3/amino_acid_plot.pdf", width = 9, height = 7)
-# 
-# 
+#
+#
 # #Carbohydrates
-# carbohydrates_variable_id <- 
+# carbohydrates_variable_id <-
 #   c(cluster3_metabolite$variable_id[c(15, 20)], "4.83_87.0088m/z")
-# 
-# idx <- 
-#   match(carbohydrates_variable_id, 
+#
+# idx <-
+#   match(carbohydrates_variable_id,
 #         rownames(metabolome_subject_data_mean))
-# 
-# mean_value <- 
+#
+# mean_value <-
 #   metabolome_subject_data_mean[idx, ] %>%
 #   as.data.frame() %>%
 #   tibble::rownames_to_column(var = "variable_id") %>%
 #   tidyr::pivot_longer(cols = -variable_id,
 #                       names_to = "TP",
 #                       values_to = "mean")
-# 
-# sem_value <- 
+#
+# sem_value <-
 #   metabolome_subject_data_sem[idx, ] %>%
 #   as.data.frame() %>%
 #   tibble::rownames_to_column(var = "variable_id") %>%
 #   tidyr::pivot_longer(cols = -variable_id,
 #                       names_to = "TP",
 #                       values_to = "sem")
-# 
-# plot <- 
+#
+# plot <-
 #   mean_value %>%
 #   dplyr::left_join(sem_value, by = c("variable_id", "TP")) %>%
 #   dplyr::mutate(TP = factor(as.character(TP),
-#                             levels = c("0", "30", "60", "120", "240"))) %>% 
-#   dplyr::left_join(variable_info1, by = "variable_id") %>% 
+#                             levels = c("0", "30", "60", "120", "240"))) %>%
+#   dplyr::left_join(variable_info1, by = "variable_id") %>%
 #   ggplot(aes(TP, mean, group = Metabolite)) +
 #   geom_line(aes(color = Metabolite)) +
 #   geom_errorbar(aes(ymin = mean - sem, ymax = mean + sem,
@@ -1390,47 +1377,47 @@ ggsave(
 #     panel.background = element_rect(fill = "transparent", color = NA),
 #     plot.background = element_rect(fill = "transparent", color = NA),
 #     legend.background = element_rect(fill = "transparent", color = NA)
-#   ) 
-# 
+#   )
+#
 # plot
 # # ggsave(plot, filename = "cluster_3/carbohydrates_plot.pdf", width = 7, height = 7)
-# 
-# 
-# 
-# 
-# 
-# 
-# 
+#
+#
+#
+#
+#
+#
+#
 # #acylcarnitine
-# acylcarnitine_variable_id <- 
+# acylcarnitine_variable_id <-
 #   cluster2_metabolite$variable_id[c(2, 3, 5, 6, 14:17,20)]
-# 
-# idx <- 
-#   match(acylcarnitine_variable_id, 
+#
+# idx <-
+#   match(acylcarnitine_variable_id,
 #         rownames(metabolome_subject_data_mean))
-# 
-# mean_value <- 
+#
+# mean_value <-
 #   metabolome_subject_data_mean[idx, ] %>%
 #   as.data.frame() %>%
 #   tibble::rownames_to_column(var = "variable_id") %>%
 #   tidyr::pivot_longer(cols = -variable_id,
 #                       names_to = "TP",
 #                       values_to = "mean")
-# 
-# sem_value <- 
+#
+# sem_value <-
 #   metabolome_subject_data_sem[idx, ] %>%
 #   as.data.frame() %>%
 #   tibble::rownames_to_column(var = "variable_id") %>%
 #   tidyr::pivot_longer(cols = -variable_id,
 #                       names_to = "TP",
 #                       values_to = "sem")
-# 
-# plot <- 
+#
+# plot <-
 #   mean_value %>%
 #   dplyr::left_join(sem_value, by = c("variable_id", "TP")) %>%
 #   dplyr::mutate(TP = factor(as.character(TP),
-#                             levels = c("0", "30", "60", "120", "240"))) %>% 
-#   dplyr::left_join(variable_info1, by = "variable_id") %>% 
+#                             levels = c("0", "30", "60", "120", "240"))) %>%
+#   dplyr::left_join(variable_info1, by = "variable_id") %>%
 #   ggplot(aes(TP, mean, group = Metabolite)) +
 #   geom_line(aes(color = Metabolite)) +
 #   geom_errorbar(aes(ymin = mean - sem, ymax = mean + sem,
@@ -1447,52 +1434,52 @@ ggsave(
 #     panel.background = element_rect(fill = "transparent", color = NA),
 #     plot.background = element_rect(fill = "transparent", color = NA),
 #     legend.background = element_rect(fill = "transparent", color = NA)
-#   ) 
-# 
+#   )
+#
 # plot
 # ggsave(plot, filename = "cluster_2/acylcarnitine_plot.pdf", width = 9, height = 7)
-# 
-# 
-# 
-# 
-# 
-# 
+#
+#
+#
+#
+#
+#
 # #cytokine
-# cytokine_variable_id3 <- 
+# cytokine_variable_id3 <-
 #   cluster3_cytokine$variable_id
-# cytokine_variable_id2 <- 
+# cytokine_variable_id2 <-
 #   cluster2_cytokine$variable_id
-# 
-# idx <- 
-#   match(c(cytokine_variable_id3, cytokine_variable_id2), 
+#
+# idx <-
+#   match(c(cytokine_variable_id3, cytokine_variable_id2),
 #         rownames(cytokine_subject_data_mean))
-# 
-# mean_value <- 
+#
+# mean_value <-
 #   cytokine_subject_data_mean[idx, ] %>%
 #   as.data.frame() %>%
 #   tibble::rownames_to_column(var = "variable_id") %>%
 #   tidyr::pivot_longer(cols = -variable_id,
 #                       names_to = "TP",
 #                       values_to = "mean")
-# 
-# sem_value <- 
+#
+# sem_value <-
 #   cytokine_subject_data_sem[idx, ] %>%
 #   as.data.frame() %>%
 #   tibble::rownames_to_column(var = "variable_id") %>%
 #   tidyr::pivot_longer(cols = -variable_id,
 #                       names_to = "TP",
 #                       values_to = "sem")
-# 
-# plot <- 
+#
+# plot <-
 #   mean_value %>%
 #   dplyr::left_join(sem_value, by = c("variable_id", "TP")) %>%
 #   dplyr::mutate(TP = factor(as.character(TP),
-#                             levels = c("0", "30", "60", "120", "240"))) %>% 
-#   dplyr::left_join(variable_info3, by = "variable_id") %>% 
+#                             levels = c("0", "30", "60", "120", "240"))) %>%
+#   dplyr::left_join(variable_info3, by = "variable_id") %>%
 #   dplyr::mutate(cluster = case_when(
 #     variable_id %in% cytokine_variable_id3 ~ "Cluster 3",
 #     variable_id %in% cytokine_variable_id2 ~ "Cluster 2"
-#   )) %>% 
+#   )) %>%
 #   ggplot(aes(TP, mean, group = mol_name)) +
 #   geom_line(aes(color = mol_name)) +
 #   geom_errorbar(aes(ymin = mean - sem, ymax = mean + sem,
@@ -1511,123 +1498,123 @@ ggsave(
 #     legend.background = element_rect(fill = "transparent", color = NA)
 #   ) +
 #   facet_wrap(facets = vars(cluster), scales = "free_y")
-# 
+#
 # plot
 # ggsave(plot, filename = "cytokine_plot.pdf", width = 12, height = 7)
-# 
-# 
+#
+#
 # ###lipid class chanfges
 # ##PC, PE, DAG TAG FFA
 # pc_idx <- cluster1_metabolite$variable_id[c(5,11)]
 # pe_idx <- cluster1_metabolite$variable_id[c(7,8,9,12,13,19)]
-# dag_idx <- cluster1_lipid %>% 
-#   dplyr::filter(stringr::str_detect(mol_name, "DAG")) %>% 
+# dag_idx <- cluster1_lipid %>%
+#   dplyr::filter(stringr::str_detect(mol_name, "DAG")) %>%
 #   dplyr::pull(variable_id)
-# 
-# tag_idx <- cluster1_lipid %>% 
-#   dplyr::filter(stringr::str_detect(mol_name, "TAG")) %>% 
-#   dplyr::pull(variable_id)  
-# 
-# ffa_idx <- cluster2_lipid %>% 
-#   dplyr::filter(stringr::str_detect(mol_name, "FFA")) %>% 
-#   dplyr::pull(variable_id)  
-# 
-# pc_data <- 
-#   metabolome_fc_p %>% 
+#
+# tag_idx <- cluster1_lipid %>%
+#   dplyr::filter(stringr::str_detect(mol_name, "TAG")) %>%
+#   dplyr::pull(variable_id)
+#
+# ffa_idx <- cluster2_lipid %>%
+#   dplyr::filter(stringr::str_detect(mol_name, "FFA")) %>%
+#   dplyr::pull(variable_id)
+#
+# pc_data <-
+#   metabolome_fc_p %>%
 #   purrr::map(.f = function(x){
-#     x %>% 
-#       dplyr::filter(variable_id %in% pc_idx) %>% 
-#       dplyr::select(p_value, fc) %>% 
+#     x %>%
+#       dplyr::filter(variable_id %in% pc_idx) %>%
+#       dplyr::select(p_value, fc) %>%
 #       apply(2, mean)
-#   }) %>% 
-#   do.call(rbind, .) %>% 
-#   as.data.frame() %>% 
-#   dplyr::mutate(fc = log(fc, 2)) %>% 
-#   dplyr::mutate(p_value = -log(p_value, 10)) %>% 
-#   dplyr::add_row(p_value = 0, fc = 0, .before = 1) %>% 
-#   dplyr::mutate(TP = c(0, 30, 60, 120, 240)) %>% 
+#   }) %>%
+#   do.call(rbind, .) %>%
+#   as.data.frame() %>%
+#   dplyr::mutate(fc = log(fc, 2)) %>%
+#   dplyr::mutate(p_value = -log(p_value, 10)) %>%
+#   dplyr::add_row(p_value = 0, fc = 0, .before = 1) %>%
+#   dplyr::mutate(TP = c(0, 30, 60, 120, 240)) %>%
 #   dplyr::mutate(class = "PC")
-# 
-# pe_data <- 
-#   metabolome_fc_p %>% 
+#
+# pe_data <-
+#   metabolome_fc_p %>%
 #   purrr::map(.f = function(x){
-#     x %>% 
-#       dplyr::filter(variable_id %in% pe_idx) %>% 
-#       dplyr::select(p_value, fc) %>% 
+#     x %>%
+#       dplyr::filter(variable_id %in% pe_idx) %>%
+#       dplyr::select(p_value, fc) %>%
 #       apply(2, mean)
-#   }) %>% 
-#   do.call(rbind, .) %>% 
-#   as.data.frame() %>% 
-#   dplyr::mutate(fc = log(fc, 2)) %>% 
-#   dplyr::mutate(p_value = -log(p_value, 10)) %>% 
-#   dplyr::add_row(p_value = 0, fc = 0, .before = 1) %>% 
-#   dplyr::mutate(TP = c(0, 30, 60, 120, 240)) %>% 
+#   }) %>%
+#   do.call(rbind, .) %>%
+#   as.data.frame() %>%
+#   dplyr::mutate(fc = log(fc, 2)) %>%
+#   dplyr::mutate(p_value = -log(p_value, 10)) %>%
+#   dplyr::add_row(p_value = 0, fc = 0, .before = 1) %>%
+#   dplyr::mutate(TP = c(0, 30, 60, 120, 240)) %>%
 #   dplyr::mutate(class = "PE")
-# 
-# dag_data <- 
-#   lipidomics_fc_p %>% 
+#
+# dag_data <-
+#   lipidomics_fc_p %>%
 #   purrr::map(.f = function(x){
-#     x %>% 
-#       dplyr::filter(variable_id %in% dag_idx) %>% 
-#       dplyr::select(p_value, fc) %>% 
+#     x %>%
+#       dplyr::filter(variable_id %in% dag_idx) %>%
+#       dplyr::select(p_value, fc) %>%
 #       apply(2, mean)
-#   }) %>% 
-#   do.call(rbind, .) %>% 
-#   as.data.frame() %>% 
-#   dplyr::mutate(fc = log(fc, 2)) %>% 
-#   dplyr::mutate(p_value = -log(p_value, 10)) %>% 
-#   dplyr::add_row(p_value = 0, fc = 0, .before = 1) %>% 
-#   dplyr::mutate(TP = c(0, 30, 60, 120, 240)) %>% 
+#   }) %>%
+#   do.call(rbind, .) %>%
+#   as.data.frame() %>%
+#   dplyr::mutate(fc = log(fc, 2)) %>%
+#   dplyr::mutate(p_value = -log(p_value, 10)) %>%
+#   dplyr::add_row(p_value = 0, fc = 0, .before = 1) %>%
+#   dplyr::mutate(TP = c(0, 30, 60, 120, 240)) %>%
 #   dplyr::mutate(class = "DAG")
-# 
-# tag_data <- 
-#   lipidomics_fc_p %>% 
+#
+# tag_data <-
+#   lipidomics_fc_p %>%
 #   purrr::map(.f = function(x){
-#     x %>% 
-#       dplyr::filter(variable_id %in% tag_idx) %>% 
-#       dplyr::select(p_value, fc) %>% 
+#     x %>%
+#       dplyr::filter(variable_id %in% tag_idx) %>%
+#       dplyr::select(p_value, fc) %>%
 #       apply(2, mean)
-#   }) %>% 
-#   do.call(rbind, .) %>% 
-#   as.data.frame() %>% 
-#   dplyr::mutate(fc = log(fc, 2)) %>% 
-#   dplyr::mutate(p_value = -log(p_value, 10)) %>% 
-#   dplyr::add_row(p_value = 0, fc = 0, .before = 1) %>% 
-#   dplyr::mutate(TP = c(0, 30, 60, 120, 240)) %>% 
+#   }) %>%
+#   do.call(rbind, .) %>%
+#   as.data.frame() %>%
+#   dplyr::mutate(fc = log(fc, 2)) %>%
+#   dplyr::mutate(p_value = -log(p_value, 10)) %>%
+#   dplyr::add_row(p_value = 0, fc = 0, .before = 1) %>%
+#   dplyr::mutate(TP = c(0, 30, 60, 120, 240)) %>%
 #   dplyr::mutate(class = "TAG")
-# 
-# ffa_data <- 
-#   lipidomics_fc_p %>% 
+#
+# ffa_data <-
+#   lipidomics_fc_p %>%
 #   purrr::map(.f = function(x){
-#     x %>% 
-#       dplyr::filter(variable_id %in% ffa_idx) %>% 
-#       dplyr::select(p_value, fc) %>% 
+#     x %>%
+#       dplyr::filter(variable_id %in% ffa_idx) %>%
+#       dplyr::select(p_value, fc) %>%
 #       apply(2, mean)
-#   }) %>% 
-#   do.call(rbind, .) %>% 
-#   as.data.frame() %>% 
-#   dplyr::mutate(fc = log(fc, 2)) %>% 
-#   dplyr::mutate(p_value = -log(p_value, 10)) %>% 
-#   dplyr::add_row(p_value = 0, fc = 0, .before = 1) %>% 
-#   dplyr::mutate(TP = c(0, 30, 60, 120, 240)) %>% 
+#   }) %>%
+#   do.call(rbind, .) %>%
+#   as.data.frame() %>%
+#   dplyr::mutate(fc = log(fc, 2)) %>%
+#   dplyr::mutate(p_value = -log(p_value, 10)) %>%
+#   dplyr::add_row(p_value = 0, fc = 0, .before = 1) %>%
+#   dplyr::mutate(TP = c(0, 30, 60, 120, 240)) %>%
 #   dplyr::mutate(class = "FFA")
-# 
+#
 # temp_data =
 #   rbind(pc_data,
 #         pe_data,
 #         dag_data,
 #         tag_data,
 #         ffa_data)
-# plot <- 
-#   temp_data %>% 
-#   dplyr::mutate(TP = factor(as.character(TP), levels = c("0", "30", "60", "120", "240"))) %>% 
-#   dplyr::mutate(class = factor(class, levels = c("PC", "PE", 'DAG', "TAG", "FFA"))) %>% 
+# plot <-
+#   temp_data %>%
+#   dplyr::mutate(TP = factor(as.character(TP), levels = c("0", "30", "60", "120", "240"))) %>%
+#   dplyr::mutate(class = factor(class, levels = c("PC", "PE", 'DAG', "TAG", "FFA"))) %>%
 #   ggplot(aes(TP, class)) +
-#   geom_point(aes(size = p_value, 
+#   geom_point(aes(size = p_value,
 #                  fill = fc),
 #              shape = 21) +
-#   scale_fill_gradient2(low = ggsci::pal_aaas()(n=10)[1], 
-#                        high = ggsci::pal_aaas()(n=10)[2], 
+#   scale_fill_gradient2(low = ggsci::pal_aaas()(n=10)[1],
+#                        high = ggsci::pal_aaas()(n=10)[2],
 #                        mid = "white") +
 #   scale_size_continuous(range = c(1, 20)) +
 #   theme_bw() +
@@ -1641,12 +1628,12 @@ ggsave(
 #     panel.background = element_rect(fill = "transparent", color = NA),
 #     plot.background = element_rect(fill = "transparent", color = NA),
 #     legend.background = element_rect(fill = "transparent", color = NA)
-#   ) 
-# 
-# 
+#   )
+#
+#
 # # ggsave(plot, filename = "lipid_change.pdf", width = 9, height = 5)
-# 
-# 
+#
+#
 # ###lipid changes accoridng to carbon and un number
 # setwd(r4projects::get_project_wd())
 # lipid_info <- read.table("data/shake_study/lipidomics_data_analysis/DEG/Lipomat05.txt", header = TRUE, sep = "\t")
@@ -1654,33 +1641,33 @@ ggsave(
 # lipidomics_expression_data <-
 #   expression_data
 # setwd("data/shake_study/3_omics/k_means_clustering/")
-# 
+#
 # tag_variable_info <-
 #   variable_info2[match(cluster1_lipid$variable_id, variable_info2$variable_id), ] %>%
 #   dplyr::filter(subclass == 'TAG') %>%
 #   dplyr::left_join(lipid_info, by = c("mol_name" = "Lipid_Name"))
-# 
-# 
+#
+#
 # plot(tag_variable_info$Total_Carb,
 #      tag_variable_info$Total_Unsat)
-# 
-# temp_data1 <- 
-#   tag_variable_info[,c("Total_Carb", "Total_Unsat")] %>% 
-#   dplyr::mutate(variable_id = paste(Total_Carb, Total_Unsat, sep = "_")) %>% 
-#   dplyr::group_by(variable_id) %>% 
-#   dplyr::summarise(n = n()) %>% 
-#   dplyr::ungroup() %>% 
-#   dplyr::mutate(Total_Carb = stringr::str_split(variable_id, "_") %>% 
+#
+# temp_data1 <-
+#   tag_variable_info[,c("Total_Carb", "Total_Unsat")] %>%
+#   dplyr::mutate(variable_id = paste(Total_Carb, Total_Unsat, sep = "_")) %>%
+#   dplyr::group_by(variable_id) %>%
+#   dplyr::summarise(n = n()) %>%
+#   dplyr::ungroup() %>%
+#   dplyr::mutate(Total_Carb = stringr::str_split(variable_id, "_") %>%
 #                   lapply(function(x)x[1])
-#                 %>% unlist()) %>% 
-#   dplyr::mutate(Total_Unsat = stringr::str_split(variable_id, "_") %>% 
+#                 %>% unlist()) %>%
+#   dplyr::mutate(Total_Unsat = stringr::str_split(variable_id, "_") %>%
 #                   lapply(function(x)x[2])
-#                 %>% unlist()) 
-# 
-# plot1 <- 
-#   temp_data1 %>% 
+#                 %>% unlist())
+#
+# plot1 <-
+#   temp_data1 %>%
 #   ggplot(aes(x = Total_Carb, y = Total_Unsat)) +
-#   geom_point(aes(size = n), 
+#   geom_point(aes(size = n),
 #              shape = 21,
 #              fill = ggsci::pal_aaas()(n=10)[9]) +
 #   scale_size_continuous(range = c(5, 10)) +
@@ -1697,69 +1684,69 @@ ggsave(
 #     legend.background = element_rect(fill = "transparent", color = NA),
 #     plot.margin = unit(x = c(0, 0, 0, 0),
 #                        units = "cm")
-#   ) 
-# 
-# temp_data2 <- 
-#   tag_variable_info$Total_Carb %>% 
-#   unique() %>% 
+#   )
+#
+# temp_data2 <-
+#   tag_variable_info$Total_Carb %>%
+#   unique() %>%
 #   purrr::map(function(x){
-#     temp_index <- 
-#       tag_variable_info %>% 
-#       dplyr::filter(Total_Carb == x) %>% 
+#     temp_index <-
+#       tag_variable_info %>%
+#       dplyr::filter(Total_Carb == x) %>%
 #       dplyr::pull(variable_id)
-#     
-#     temp_data <- 
-#       lipidomics_expression_data[temp_index,] %>% 
-#       `+`(1) %>% 
-#       log(2) %>% 
+#
+#     temp_data <-
+#       lipidomics_expression_data[temp_index,] %>%
+#       `+`(1) %>%
+#       log(2) %>%
 #       apply(1, function(x){
 #         x / sd(x)
-#       }) %>% 
+#       }) %>%
 #       apply(1, mean)
-#     
-#   }) %>% 
-#   do.call(rbind, .) %>% 
+#
+#   }) %>%
+#   do.call(rbind, .) %>%
 #   as.data.frame()
-# rownames(temp_data2) <- 
-#   tag_variable_info$Total_Carb %>% 
+# rownames(temp_data2) <-
+#   tag_variable_info$Total_Carb %>%
 #   unique()
-# 
+#
 # library(plyr)
-# 
-# 
+#
+#
 # ##mean value
-# temp_data2_mean <- 
-#   temp_data2 %>% 
-#   t() %>% 
-#   as.data.frame() %>% 
+# temp_data2_mean <-
+#   temp_data2 %>%
+#   t() %>%
+#   as.data.frame() %>%
 #   purrr::map(.f = function(x){
-#     data.frame(id =  colnames(temp_data2), x) %>% 
-#       dplyr::mutate(TP = stringr::str_split(id, "_") %>% 
-#                       lapply(function(z)z[2]) %>% 
-#                       unlist()) %>% 
-#       dplyr::mutate(subject_id = stringr::str_split(id, "_") %>% 
-#                       lapply(function(z)z[1]) %>% 
-#                       unlist()) %>% 
-#       plyr::dlply(.variables = .(TP)) %>% 
+#     data.frame(id =  colnames(temp_data2), x) %>%
+#       dplyr::mutate(TP = stringr::str_split(id, "_") %>%
+#                       lapply(function(z)z[2]) %>%
+#                       unlist()) %>%
+#       dplyr::mutate(subject_id = stringr::str_split(id, "_") %>%
+#                       lapply(function(z)z[1]) %>%
+#                       unlist()) %>%
+#       plyr::dlply(.variables = .(TP)) %>%
 #       purrr::map(function(y){
-#         y[,"x"] %>% 
+#         y[,"x"] %>%
 #           mean()
-#       }) %>% 
+#       }) %>%
 #       unlist()
-#   }) %>% 
-#   do.call(rbind, .) %>% 
+#   }) %>%
+#   do.call(rbind, .) %>%
 #   as.data.frame()
-# 
-# plot2 <- 
-#   temp_data2_mean %>% 
+#
+# plot2 <-
+#   temp_data2_mean %>%
 #   apply(1, function(x){
 #     (x - mean(x)) / sd(x)
-#   }) %>% 
-#   t() %>% 
-#   as.data.frame() %>% 
-#   tibble::rownames_to_column(var = "carbon_number") %>% 
-#   tidyr::pivot_longer(cols = -carbon_number, names_to = "TP", values_to = "value") %>% 
-#   dplyr::mutate(TP = factor(TP, levels = stringr::str_sort(unique(TP), numeric = TRUE))) %>% 
+#   }) %>%
+#   t() %>%
+#   as.data.frame() %>%
+#   tibble::rownames_to_column(var = "carbon_number") %>%
+#   tidyr::pivot_longer(cols = -carbon_number, names_to = "TP", values_to = "value") %>%
+#   dplyr::mutate(TP = factor(TP, levels = stringr::str_sort(unique(TP), numeric = TRUE))) %>%
 #   ggplot(aes(x = carbon_number, y = TP)) +
 #   geom_tile(aes(fill = value), color = "white", show.legend = FALSE) +
 #   scale_fill_gradient2(low = ggsci::pal_aaas()(n=10)[1],
@@ -1777,69 +1764,69 @@ ggsave(
 #     plot.margin = unit(x = c(0, 0, 0, 0),
 #                        units = "cm")
 #   )
-# 
-# temp_data3 <- 
-#   tag_variable_info$Total_Unsat %>% 
-#   unique() %>% 
+#
+# temp_data3 <-
+#   tag_variable_info$Total_Unsat %>%
+#   unique() %>%
 #   purrr::map(function(x){
-#     temp_index <- 
-#       tag_variable_info %>% 
-#       dplyr::filter(Total_Unsat == x) %>% 
+#     temp_index <-
+#       tag_variable_info %>%
+#       dplyr::filter(Total_Unsat == x) %>%
 #       dplyr::pull(variable_id)
-#     
-#     temp_data <- 
-#       lipidomics_expression_data[temp_index,] %>% 
-#       `+`(1) %>% 
-#       log(2) %>% 
+#
+#     temp_data <-
+#       lipidomics_expression_data[temp_index,] %>%
+#       `+`(1) %>%
+#       log(2) %>%
 #       apply(1, function(x){
 #         x / sd(x)
-#       }) %>% 
+#       }) %>%
 #       apply(1, mean)
-#     
-#   }) %>% 
-#   do.call(rbind, .) %>% 
+#
+#   }) %>%
+#   do.call(rbind, .) %>%
 #   as.data.frame()
-# 
-# rownames(temp_data3) <- 
-#   tag_variable_info$Total_Unsat %>% 
+#
+# rownames(temp_data3) <-
+#   tag_variable_info$Total_Unsat %>%
 #   unique()
-# 
+#
 # library(plyr)
-# 
-# 
+#
+#
 # ##mean value
-# temp_data3_mean <- 
-#   temp_data3 %>% 
-#   t() %>% 
-#   as.data.frame() %>% 
+# temp_data3_mean <-
+#   temp_data3 %>%
+#   t() %>%
+#   as.data.frame() %>%
 #   purrr::map(.f = function(x){
-#     data.frame(id =  colnames(temp_data3), x) %>% 
-#       dplyr::mutate(TP = stringr::str_split(id, "_") %>% 
-#                       lapply(function(z)z[2]) %>% 
-#                       unlist()) %>% 
-#       dplyr::mutate(subject_id = stringr::str_split(id, "_") %>% 
-#                       lapply(function(z)z[1]) %>% 
-#                       unlist()) %>% 
-#       plyr::dlply(.variables = .(TP)) %>% 
+#     data.frame(id =  colnames(temp_data3), x) %>%
+#       dplyr::mutate(TP = stringr::str_split(id, "_") %>%
+#                       lapply(function(z)z[2]) %>%
+#                       unlist()) %>%
+#       dplyr::mutate(subject_id = stringr::str_split(id, "_") %>%
+#                       lapply(function(z)z[1]) %>%
+#                       unlist()) %>%
+#       plyr::dlply(.variables = .(TP)) %>%
 #       purrr::map(function(y){
-#         y[,"x"] %>% 
+#         y[,"x"] %>%
 #           mean()
-#       }) %>% 
+#       }) %>%
 #       unlist()
-#   }) %>% 
-#   do.call(rbind, .) %>% 
+#   }) %>%
+#   do.call(rbind, .) %>%
 #   as.data.frame()
-# 
-# plot3 <- 
-#   temp_data3_mean %>% 
+#
+# plot3 <-
+#   temp_data3_mean %>%
 #   apply(1, function(x){
 #     (x - mean(x)) / sd(x)
-#   }) %>% 
-#   t() %>% 
-#   as.data.frame() %>% 
-#   tibble::rownames_to_column(var = "un_number") %>% 
-#   tidyr::pivot_longer(cols = -un_number, names_to = "TP", values_to = "value") %>% 
-#   dplyr::mutate(TP = factor(TP, levels = stringr::str_sort(unique(TP), numeric = TRUE))) %>% 
+#   }) %>%
+#   t() %>%
+#   as.data.frame() %>%
+#   tibble::rownames_to_column(var = "un_number") %>%
+#   tidyr::pivot_longer(cols = -un_number, names_to = "TP", values_to = "value") %>%
+#   dplyr::mutate(TP = factor(TP, levels = stringr::str_sort(unique(TP), numeric = TRUE))) %>%
 #   ggplot(aes(y = un_number, x = TP)) +
 #   geom_tile(aes(fill = value), color = "white") +
 #   scale_fill_gradient2(low = ggsci::pal_aaas()(n=10)[1],
@@ -1857,14 +1844,14 @@ ggsave(
 #     plot.margin = unit(x = c(0, 0, 0, 0),
 #                        units = "cm")
 #   )
-# 
+#
 # library(patchwork)
 # plot2 + plot1 + patchwork::plot_layout(ncol = 1, heights = c(1,2))
 # plot1 + plot3 + patchwork::plot_layout(widths = c(2,1))
-# 
-# 
-# 
-# 
+#
+#
+#
+#
 # plot <-
 #   {
 #     plot2 + plot2 + plot_layout(ncol = 2, widths = c(2, 1))
@@ -1873,13 +1860,8 @@ ggsave(
 #     plot1 + plot3 + plot_layout(ncol = 2, widths = c(2, 1))
 #   } +
 #   plot_layout(ncol = 1, heights = c(1, 2))
-# 
+#
 # plot
-# 
-# 
+#
+#
 # ggsave(plot, filename = "lipid_carbon_number.pdf", width = 8, height = 7)
-
-
-
-
-

@@ -6,6 +6,8 @@ rm(list = ls())
 
 setwd(r4projects::get_project_wd())
 
+source("1-code/tools.R")
+
 load("3-data_analysis/transcriptomics/data_preparation/transcriptomics_data")
 
 dir.create("3-data_analysis/transcriptomics/marker_depression")

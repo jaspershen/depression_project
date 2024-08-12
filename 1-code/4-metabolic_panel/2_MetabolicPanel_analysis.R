@@ -1,6 +1,11 @@
 no_function()
 
 setwd(r4projects::get_project_wd())
+
+rm(list = ls())
+
+source("1-code/tools.R")
+
 setwd("3-data_analysis/Metabolic_Panel/")
 
 library(samr)
