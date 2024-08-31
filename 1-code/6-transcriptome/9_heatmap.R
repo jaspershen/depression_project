@@ -8,9 +8,9 @@ library(tidyverse)
 
 load("3-data_analysis/transcriptomics/data_preparation/transcriptomics_data")
 
-dir.create("3-data_analysis/transcriptomics/heatmap_for_some_genes/all_depressed",
+dir.create("3-data_analysis/transcriptomics/heatmap_for_some_genes/",
            recursive = TRUE)
-setwd("3-data_analysis/transcriptomics/heatmap_for_some_genes/all_depressed")
+setwd("3-data_analysis/transcriptomics/heatmap_for_some_genes/")
 
 # data <- readr::read_csv("Gene.csv")
 
@@ -79,9 +79,7 @@ transcriptomics_data <-
   transcriptomics_data %>%
   activate_mass_dataset(what = "sample_info") %>%
   dplyr::filter(!is.na(Time)) %>%
-  dplyr::filter(!Time %in% "T6") %>% 
-  dplyr::filter(!is.na(depressed)) %>% 
-  dplyr::filter(depressed == "Depressed")
+  dplyr::filter(!Time %in% "T6")
 
 expression_data <-
   transcriptomics_data %>%
@@ -122,6 +120,7 @@ new_expression_data <-
   }) %>%
   t() %>%
   as.data.frame()
+
 
 temp_data1 <-
   new_expression_data[gene_list1,]
@@ -193,6 +192,8 @@ ggsave(plot2,
        filename = "gene_list2_heatmap.png",
        width = 4,
        height = 7)
+
+
 
 ####Heatmap for all the participants
 dim(expression_data)
@@ -320,6 +321,7 @@ subject_color <-
 
 names(subject_color) <- levels(sample_info$subject_id)
 
+
 column_anno <-
   HeatmapAnnotation(subject_id = sample_info$subject_id,
                     col = list(subject_id = subject_color))
@@ -337,7 +339,7 @@ plot1 <-
     temp_data1,
     col = col_fun,
     cluster_columns = FALSE,
-    cluster_rows = TRUE,
+    cluster_rows = FALSE,
     show_column_names = FALSE,
     border = TRUE,
     column_split = column_split,
@@ -361,12 +363,15 @@ ggsave(plot1,
        height = 7)
 
 
+
+
+
 plot2 <-
   Heatmap(
     temp_data2,
     col = col_fun,
     cluster_columns = FALSE,
-    cluster_rows = TRUE,
+    cluster_rows = FALSE,
     show_column_names = FALSE,
     border = TRUE,
     column_split = column_split,
@@ -388,3 +393,4 @@ ggsave(plot2,
        filename = "gene_list2_all_heatmap.png",
        width = 7,
        height = 7)
+

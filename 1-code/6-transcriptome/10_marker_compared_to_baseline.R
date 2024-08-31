@@ -75,104 +75,102 @@ names(subject_data) <-
 
 table(sample_info$Time)
 
-fc_p_value <-
-  pbapply::pblapply(subject_data[-1], function(x) {
-    base_data <-
-      subject_data[[1]]
-    
-    compare_data <-
-      x
-    
-    sample_info1 <-
-    sample_info %>% 
-      dplyr::filter(sample_id %in% colnames(base_data)) %>% 
-      dplyr::arrange(subject_id)
-    
-    sample_info2 <-
-      sample_info %>% 
-      dplyr::filter(sample_id %in% colnames(x)) %>% 
-      dplyr::arrange(subject_id)
-    
-    intersect_subject_id <- 
-    intersect(sample_info1$subject_id,
-              sample_info2$subject_id)
-    
-    sample_info1 <-
-      sample_info1 %>% 
-      dplyr::filter(subject_id %in% intersect_subject_id)
-    
-    sample_info2 <-
-      sample_info2 %>% 
-      dplyr::filter(subject_id %in% intersect_subject_id)
-    
-    
-    base_data <-
-      base_data[,sample_info1$sample_id]
-    
-    x <-
-      x[,sample_info2$sample_id]
-    
-    p_value <- lapply(1:nrow(x), function(idx) {
-      wilcox.test(as.numeric(x[idx, ]), as.numeric(base_data[idx, ]))$p.value
-    }) %>%
-      unlist()
-
-    fdr <- p.adjust(p_value, method = "fdr")
-
-    fc <- lapply(1:nrow(x), function(idx) {
-      mean(as.numeric(x[idx, ])) / mean(as.numeric(base_data[idx, ]))
-    }) %>%
-      unlist()
-
-    fc[is.infinite(fc)] <- max(fc[!is.infinite(fc)])
-
-    data.frame(
-      variable_id = variable_info$variable_id,
-      p_value,
-      fdr,
-      fc,
-      stringsAsFactors = FALSE
-    )
-  })
-
-save(fc_p_value, file = "fc_p_value")
+# fc_p_value <-
+#   pbapply::pblapply(subject_data[-1], function(x) {
+#     base_data <-
+#       subject_data[[1]]
+#     
+#     compare_data <-
+#       x
+#     
+#     sample_info1 <-
+#     sample_info %>% 
+#       dplyr::filter(sample_id %in% colnames(base_data)) %>% 
+#       dplyr::arrange(subject_id)
+#     
+#     sample_info2 <-
+#       sample_info %>% 
+#       dplyr::filter(sample_id %in% colnames(x)) %>% 
+#       dplyr::arrange(subject_id)
+#     
+#     intersect_subject_id <- 
+#     intersect(sample_info1$subject_id,
+#               sample_info2$subject_id)
+#     
+#     sample_info1 <-
+#       sample_info1 %>% 
+#       dplyr::filter(subject_id %in% intersect_subject_id)
+#     
+#     sample_info2 <-
+#       sample_info2 %>% 
+#       dplyr::filter(subject_id %in% intersect_subject_id)
+#     
+#     
+#     base_data <-
+#       base_data[,sample_info1$sample_id]
+#     
+#     x <-
+#       x[,sample_info2$sample_id]
+#     
+#     p_value <- lapply(1:nrow(x), function(idx) {
+#       wilcox.test(as.numeric(x[idx, ]), as.numeric(base_data[idx, ]))$p.value
+#     }) %>%
+#       unlist()
+# 
+#     fdr <- p.adjust(p_value, method = "fdr")
+# 
+#     fc <- lapply(1:nrow(x), function(idx) {
+#       mean(as.numeric(x[idx, ])) / mean(as.numeric(base_data[idx, ]))
+#     }) %>%
+#       unlist()
+# 
+#     fc[is.infinite(fc)] <- max(fc[!is.infinite(fc)])
+# 
+#     data.frame(
+#       variable_id = variable_info$variable_id,
+#       p_value,
+#       fdr,
+#       fc,
+#       stringsAsFactors = FALSE
+#     )
+#   })
+# 
+# save(fc_p_value, file = "fc_p_value")
 
 load("fc_p_value")
 
-##find marker for each time points
-marker_each_point <-
-  lapply(fc_p_value, function(x) {
-    idx1 <- which(x$p_value < 0.05 & x$fc > 1)
-    idx2 <- which(x$p_value < 0.05 & x$fc < 1)
-
-    gene1 <-
-      try(data.frame(x[idx1, ],
-                     class = "increase",
-                     stringsAsFactors = FALSE),
-          silent = TRUE)
-
-    if (class(gene1) == "try-error") {
-      gene1 <- NULL
-    }
-
-    gene2 <-
-      try(data.frame(x[idx2, ],
-                     class = "decrease",
-                     stringsAsFactors = FALSE),
-          silent = TRUE)
-
-    if (class(gene2) == "try-error") {
-      gene2 <- NULL
-    }
-
-    rbind(gene1, gene2)
-  })
-
-
-save(marker_each_point, file = "marker_each_point")
+# ##find marker for each time points
+# marker_each_point <-
+#   lapply(fc_p_value, function(x) {
+#     idx1 <- which(x$p_value < 0.05 & x$fc > 1)
+#     idx2 <- which(x$p_value < 0.05 & x$fc < 1)
+# 
+#     gene1 <-
+#       try(data.frame(x[idx1, ],
+#                      class = "increase",
+#                      stringsAsFactors = FALSE),
+#           silent = TRUE)
+# 
+#     if (class(gene1) == "try-error") {
+#       gene1 <- NULL
+#     }
+# 
+#     gene2 <-
+#       try(data.frame(x[idx2, ],
+#                      class = "decrease",
+#                      stringsAsFactors = FALSE),
+#           silent = TRUE)
+# 
+#     if (class(gene2) == "try-error") {
+#       gene2 <- NULL
+#     }
+# 
+#     rbind(gene1, gene2)
+#   })
+# 
+# 
+# save(marker_each_point, file = "marker_each_point")
 load("marker_each_point")
-
-
 
 #####a sankey
 marker_each_point %>%

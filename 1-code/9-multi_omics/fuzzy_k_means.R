@@ -179,7 +179,6 @@ variable_info$mol_name[is.na(variable_info$mol_name)] =
 sample_info <-
   sample_info[match(colnames(expression_data), sample_info$sample_id), ]
 
-
 dim(expression_data)
 dim(sample_info)
 dim(variable_info)
@@ -606,7 +605,14 @@ pal <-
 
 range(temp_data)
 library(circlize)
-col_fun = colorRamp2(c(-2, 0, 2), c(pal[1], "white", pal[100]))
+# col_fun = colorRamp2(c(-2, 0, 2), c(pal[1], "white", pal[100]))
+
+
+col_fun <-
+  circlize::colorRamp2(
+    breaks = seq(-2, 2, length.out = 11),
+    colors = rev(RColorBrewer::brewer.pal(n = 11, name = "RdBu"))
+  )
 
 cluster <-
   c(rep(2, nrow(cluster2)), rep(1, nrow(cluster1)), rep(3, nrow(cluster3)), rep(4, nrow(cluster4)))
@@ -631,7 +637,7 @@ plot <-
     border = TRUE,
     row_names_side = "left",
     row_names_gp = gpar(fontsize = 7, col = text_color),
-    # col = col_fun,
+    col = col_fun,
     right_annotation = ha,
     name = "Z score",
     column_names_rot = 0
@@ -683,8 +689,8 @@ plot <-
     show_row_names = TRUE,
     border = TRUE,
     row_names_side = "left",
-    row_names_gp = gpar(fontsize = 7, col = text_color),
-    # col = col_fun,
+    row_names_gp = gpar(fontsize = 10, col = text_color),
+    col = col_fun,
     name = "Z score",
     column_names_rot = 0
   )
@@ -735,8 +741,8 @@ plot <-
     show_row_names = TRUE,
     border = TRUE,
     row_names_side = "left",
-    row_names_gp = gpar(fontsize = 7, col = text_color),
-    # col = col_fun,
+    row_names_gp = gpar(fontsize = 10, col = text_color),
+    col = col_fun,
     name = "Z score",
     column_names_rot = 0
   )
@@ -788,8 +794,8 @@ plot <-
     show_row_names = TRUE,
     border = TRUE,
     row_names_side = "left",
-    row_names_gp = gpar(fontsize = 7, col = text_color),
-    # col = col_fun,
+    row_names_gp = gpar(fontsize = 10, col = text_color),
+    col = col_fun,
     name = "Z score",
     column_names_rot = 0
   )
@@ -839,8 +845,8 @@ plot <-
     show_row_names = TRUE,
     border = TRUE,
     row_names_side = "left",
-    row_names_gp = gpar(fontsize = 7, col = text_color),
-    # col = col_fun,
+    row_names_gp = gpar(fontsize = 10, col = text_color),
+    col = col_fun,
     name = "Z score",
     column_names_rot = 0
   )

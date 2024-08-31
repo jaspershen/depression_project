@@ -1,6 +1,6 @@
 ###
 no_source()
-
+library(tidyverse)
 setwd(r4projects::get_project_wd())
 
 rm(list = ls())
@@ -13,6 +13,8 @@ subject_info <-
   dplyr::select(subject_id, age, sex, bdi_total, safe) %>%
   dplyr::mutate(subject_id = as.character(subject_id))
 
+load("3-data_analysis/sample_info/sample_info")
+
 library(tidyverse)
 library(data.table)
 library(tidymass)
@@ -24,32 +26,29 @@ library(RNAAgeCalc)
 dir.create("3-data_analysis/transcriptomics/age_prediction")
 setwd("3-data_analysis/transcriptomics/age_prediction")
 
-###only remain the protein-code gene
-transcriptomics_data <-
-  transcriptomics_data %>%
-  activate_mass_dataset(what = "variable_info") %>%
-  dplyr::filter(!is.na(GENETYPE)) %>%
-  dplyr::filter(GENETYPE == "protein-coding")
-
 # #####T1 point
-# data <-
-#   transcriptomics_data %>%
-#   activate_mass_dataset(what = "sample_info") %>%
-#   dplyr::filter(stringr::str_detect(sample_id, "T1")) %>%
-#   extract_expression_data()
-#
-# chronage <-
-#   data.frame(sampleid = colnames(data)) %>%
-#   dplyr::mutate(subject_id = stringr::str_extract(sampleid, "[0-9]{1,2}") %>% as.character()) %>%
-#   dplyr::left_join(subject_info, by = "subject_id") %>%
-#   dplyr::select(sampleid, age)
+data <-
+  transcriptomics_data %>%
+  activate_mass_dataset(what = "sample_info") %>%
+  dplyr::filter(stringr::str_detect(sample_id, "T1")) %>%
+  extract_expression_data()
+
+massdataset::export_mass_dataset(object = transcriptomics_data, file_type = "csv")
+
+chronage <-
+  data.frame(sampleid = colnames(data)) %>%
+  dplyr::mutate(subject_id = stringr::str_extract(sampleid, "[0-9]{1,2}") %>% as.character()) %>%
+  dplyr::left_join(subject_info, by = "subject_id") %>%
+  dplyr::select(sampleid, age)
 #
 # t1_result <-
 #   predict_age(
 #     exprdata = data,
 #     tissue = "blood",
 #     exprtype = "FPKM",
-#     chronage = chronage
+#     chronage = chronage,
+#     signature = "GenAge",
+#     stype = "caucasian"
 #   )
 #
 # t1_result <-
@@ -77,7 +76,9 @@ transcriptomics_data <-
 #     exprdata = data,
 #     tissue = "blood",
 #     exprtype = "FPKM",
-#     chronage = chronage
+#     chronage = chronage,
+#     signature = "GenAge",
+#     stype = "caucasian"
 #   )
 #
 # t2_result <-
@@ -105,7 +106,9 @@ transcriptomics_data <-
 #     exprdata = data,
 #     tissue = "blood",
 #     exprtype = "FPKM",
-#     chronage = chronage
+#     chronage = chronage,
+#     signature = "GenAge",
+#     stype = "caucasian"
 #   )
 #
 # t3_result <-
@@ -133,7 +136,9 @@ transcriptomics_data <-
 #     exprdata = data,
 #     tissue = "blood",
 #     exprtype = "FPKM",
-#     chronage = chronage
+#     chronage = chronage,
+#     signature = "GenAge",
+#     stype = "caucasian"
 #   )
 #
 # t4_result <-
@@ -162,7 +167,9 @@ transcriptomics_data <-
 #     exprdata = data,
 #     tissue = "blood",
 #     exprtype = "FPKM",
-#     chronage = chronage
+#     chronage = chronage,
+#     signature = "GenAge",
+#     stype = "caucasian"
 #   )
 #
 # t5_result <-
@@ -190,7 +197,9 @@ transcriptomics_data <-
 #     exprdata = data,
 #     tissue = "blood",
 #     exprtype = "FPKM",
-#     chronage = chronage
+#     chronage = chronage,
+#     signature = "GenAge",
+#     stype = "caucasian"
 #   )
 #
 # t6_result <-
@@ -200,124 +209,28 @@ transcriptomics_data <-
 # write.csv(t6_result, file = "t6_result.csv", row.names = FALSE)
 # save(t6_result, file = "t6_result")
 
-load("t1_result")
-load("t2_result")
-load("t3_result")
-load("t4_result")
-load("t5_result")
-load("t6_result")
 
-###summary
-t1_result <-
-  t1_result %>%
-  dplyr::mutate(subject_id = stringr::str_extract(sample_id, "[0-9]{1,2}")) %>%
-  dplyr::arrange(subject_id)
+###all samples
+data <-
+  transcriptomics_data %>%
+  activate_mass_dataset(what = "sample_info") %>%
+  extract_expression_data()
 
-t2_result <-
-  t2_result %>%
-  dplyr::mutate(subject_id = stringr::str_extract(sample_id, "[0-9]{1,2}")) %>%
-  dplyr::arrange(subject_id)
+chronage <-
+  data.frame(sampleid = colnames(data)) %>%
+  dplyr::mutate(subject_id = stringr::str_extract(sampleid, "[0-9]{1,2}") %>% as.character()) %>%
+  dplyr::left_join(subject_info, by = "subject_id") %>%
+  dplyr::select(sampleid, age)
 
-t3_result <-
-  t3_result %>%
-  dplyr::mutate(subject_id = stringr::str_extract(sample_id, "[0-9]{1,2}")) %>%
-  dplyr::arrange(subject_id)
+result <-
+  predict_age(
+    exprdata = data,
+    tissue = "blood",
+    exprtype = "FPKM",
+    chronage = chronage,
+    signature = "GenAge",
+    stype = "caucasian"
+  )
 
-t4_result <-
-  t4_result %>%
-  dplyr::mutate(subject_id = stringr::str_extract(sample_id, "[0-9]{1,2}")) %>%
-  dplyr::arrange(subject_id)
-
-t5_result <-
-  t5_result %>%
-  dplyr::mutate(subject_id = stringr::str_extract(sample_id, "[0-9]{1,2}")) %>%
-  dplyr::arrange(subject_id)
-
-t6_result <-
-  t6_result %>%
-  dplyr::mutate(subject_id = stringr::str_extract(sample_id, "[0-9]{1,2}")) %>%
-  dplyr::arrange(subject_id)
-
-t1_result <-
-  t1_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge,
-                time_point = "T1") %>%
-  dplyr::select(subject_id, age_diff, time_point)
-
-t2_result <-
-  t2_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge,
-                time_point = "T2") %>%
-  dplyr::select(subject_id, age_diff, time_point)
-
-
-t3_result <-
-  t3_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge,
-                time_point = "T3") %>%
-  dplyr::select(subject_id, age_diff, time_point)
-
-t4_result <-
-  t4_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge,
-                time_point = "T4") %>%
-  dplyr::select(subject_id, age_diff, time_point)
-
-t5_result <-
-  t5_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge,
-                time_point = "T5") %>%
-  dplyr::select(subject_id, age_diff, time_point)
-
-t6_result <-
-  t6_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge,
-                time_point = "T6") %>%
-  dplyr::select(subject_id, age_diff, time_point)
-
-temp_data <-
-  rbind(t1_result,
-        t2_result,
-        t3_result,
-        t4_result,
-        t5_result,
-        t6_result)
-
-dim(t1_result)
-dim(t2_result)
-dim(t3_result)
-dim(t4_result)
-dim(t5_result)
-dim(t6_result)
-
-library(plyr)
-
-###remove the subjects without T1
-temp_data <-
-  temp_data %>%
-  dplyr::filter(subject_id %in% t1_result$subject_id)
-
-temp_data <-
-  temp_data %>%
-  plyr::dlply(.variables = .(subject_id)) %>%
-  purrr::map(function(x) {
-    x <-
-      x %>%
-      dplyr::arrange(time_point)
-    x$age_diff <-
-      x$age_diff - x$age_diff[x$time_point == "T1"]
-    x
-  }) %>%
-  do.call(rbind, .) %>%
-  as.data.frame()
-
-temp_data %>%
-  ggplot(aes(time_point, age_diff)) +
-  geom_boxplot() +
-  geom_jitter()
-
-temp_data %>%
-  ggplot(aes(time_point, age_diff)) +
-  geom_line(aes(group = subject_id,
-                color = subject_id)) +
-  theme_bw()
+write.csv(result, file = "result.csv", row.names = FALSE)
+save(result, file = "result")

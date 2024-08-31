@@ -8,9 +8,9 @@ library(tidyverse)
 
 load("3-data_analysis/transcriptomics/data_preparation/transcriptomics_data")
 
-dir.create("3-data_analysis/transcriptomics/heatmap_for_some_genes/all_participant",
+dir.create("3-data_analysis/transcriptomics/heatmap_for_some_genes/all_depressed",
            recursive = TRUE)
-setwd("3-data_analysis/transcriptomics/heatmap_for_some_genes/all_participant")
+setwd("3-data_analysis/transcriptomics/heatmap_for_some_genes/all_depressed")
 
 # data <- readr::read_csv("Gene.csv")
 
@@ -79,7 +79,9 @@ transcriptomics_data <-
   transcriptomics_data %>%
   activate_mass_dataset(what = "sample_info") %>%
   dplyr::filter(!is.na(Time)) %>%
-  dplyr::filter(!Time %in% "T6")
+  dplyr::filter(!Time %in% "T6") %>% 
+  dplyr::filter(!is.na(depressed)) %>% 
+  dplyr::filter(depressed == "Depressed")
 
 expression_data <-
   transcriptomics_data %>%
@@ -120,7 +122,6 @@ new_expression_data <-
   }) %>%
   t() %>%
   as.data.frame()
-
 
 temp_data1 <-
   new_expression_data[gene_list1,]
@@ -319,7 +320,6 @@ subject_color <-
 
 names(subject_color) <- levels(sample_info$subject_id)
 
-
 column_anno <-
   HeatmapAnnotation(subject_id = sample_info$subject_id,
                     col = list(subject_id = subject_color))
@@ -388,3 +388,4 @@ ggsave(plot2,
        filename = "gene_list2_all_heatmap.png",
        width = 7,
        height = 7)
+

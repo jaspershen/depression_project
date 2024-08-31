@@ -24,13 +24,6 @@ library(RNAAgeCalc)
 dir.create("3-data_analysis/transcriptomics/age_prediction")
 setwd("3-data_analysis/transcriptomics/age_prediction")
 
-###only remain the protein-code gene
-transcriptomics_data <-
-  transcriptomics_data %>%
-  activate_mass_dataset(what = "variable_info")
-  # dplyr::filter(!is.na(GENETYPE)) %>%
-  # dplyr::filter(GENETYPE == "protein-coding")
-
 #####signature parameter
 
 #####T1 point
@@ -56,8 +49,7 @@ t1_optimization_result <-
     "GTExAge",
     "Peters",
     "all"
-  ),
-  function(x) {
+  ), function(x) {
     temp <-
       predict_age(
         exprdata = data,
@@ -99,8 +91,7 @@ t2_optimization_result <-
     "GTExAge",
     "Peters",
     "all"
-  ),
-  function(x) {
+  ), function(x) {
     temp <-
       predict_age(
         exprdata = data,
@@ -139,8 +130,7 @@ t3_optimization_result <-
     "GTExAge",
     "Peters",
     "all"
-  ),
-  function(x) {
+  ), function(x) {
     temp <-
       predict_age(
         exprdata = data,
@@ -180,20 +170,19 @@ chronage <-
   dplyr::select(sampleid, age)
 
 t1_optimization_result <-
-  purrr::map(c("all", "caucasian"),
-             function(x) {
-               temp <-
-                 predict_age(
-                   exprdata = data,
-                   tissue = "blood",
-                   exprtype = "FPKM",
-                   chronage = chronage,
-                   stype = x
-                 )
-               data.frame(stype = x,
-                          mean = mean(abs(temp$RNAAge - temp$ChronAge)),
-                          sd = sd(abs(temp$RNAAge - temp$ChronAge)))
-             }) %>%
+  purrr::map(c("all", "caucasian"), function(x) {
+    temp <-
+      predict_age(
+        exprdata = data,
+        tissue = "blood",
+        exprtype = "FPKM",
+        chronage = chronage,
+        stype = x
+      )
+    data.frame(stype = x,
+               mean = mean(abs(temp$RNAAge - temp$ChronAge)),
+               sd = sd(abs(temp$RNAAge - temp$ChronAge)))
+  }) %>%
   do.call(rbind, .) %>%
   as.data.frame()
 
@@ -211,20 +200,19 @@ chronage <-
   dplyr::select(sampleid, age)
 
 t2_optimization_result <-
-  purrr::map(c("all", "caucasian"),
-             function(x) {
-               temp <-
-                 predict_age(
-                   exprdata = data,
-                   tissue = "blood",
-                   exprtype = "FPKM",
-                   chronage = chronage,
-                   stype = x
-                 )
-               data.frame(stype = x,
-                          mean = mean(abs(temp$RNAAge - temp$ChronAge)),
-                          sd = sd(abs(temp$RNAAge - temp$ChronAge)))
-             }) %>%
+  purrr::map(c("all", "caucasian"), function(x) {
+    temp <-
+      predict_age(
+        exprdata = data,
+        tissue = "blood",
+        exprtype = "FPKM",
+        chronage = chronage,
+        stype = x
+      )
+    data.frame(stype = x,
+               mean = mean(abs(temp$RNAAge - temp$ChronAge)),
+               sd = sd(abs(temp$RNAAge - temp$ChronAge)))
+  }) %>%
   do.call(rbind, .) %>%
   as.data.frame()
 
@@ -242,20 +230,19 @@ chronage <-
   dplyr::select(sampleid, age)
 
 t3_optimization_result <-
-  purrr::map(c("all", "caucasian"),
-             function(x) {
-               temp <-
-                 predict_age(
-                   exprdata = data,
-                   tissue = "blood",
-                   exprtype = "FPKM",
-                   chronage = chronage,
-                   stype = x
-                 )
-               data.frame(stype = x,
-                          mean = mean(abs(temp$RNAAge - temp$ChronAge)),
-                          sd = sd(abs(temp$RNAAge - temp$ChronAge)))
-             }) %>%
+  purrr::map(c("all", "caucasian"), function(x) {
+    temp <-
+      predict_age(
+        exprdata = data,
+        tissue = "blood",
+        exprtype = "FPKM",
+        chronage = chronage,
+        stype = x
+      )
+    data.frame(stype = x,
+               mean = mean(abs(temp$RNAAge - temp$ChronAge)),
+               sd = sd(abs(temp$RNAAge - temp$ChronAge)))
+  }) %>%
   do.call(rbind, .) %>%
   as.data.frame()
 

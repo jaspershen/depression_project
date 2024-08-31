@@ -2,7 +2,7 @@
 setwd(r4projects::get_project_wd())
 rm(list = ls())
 
-rm("1-code/tools.R")
+source("1-code/tools.R")
 
 setwd("3-data_analysis/Figure_1/")
 
@@ -44,7 +44,7 @@ plot <-
   ggplot(ibsr_data, aes(x = Time, y = bdi_total)) +
   geom_jitter(
     aes(fill = `Initial Depression`),
-    size = 2.5,
+    size = 4,
     shape = 21,
     na.rm = TRUE
   ) +
@@ -69,23 +69,23 @@ plot <-
       "T7" = "One Year"
     )
   ) +
-  theme(legend.position = c(1, 1),
-        legend.justification = c(1, 1))
+  theme(
+    legend.position = c(1, 1),
+    legend.justification = c(1, 1),
+    axis.text = element_text(size = 15),
+    axis.title = element_text(size = 18)
+  )
 plot
-ggsave('Depression Boxplot.pdf',
-       height = 4.5,
-       width = 10)
+ggsave('Depression Boxplot.pdf', height = 6, width = 10)
 
-ggsave('Depression Boxplot.png',
-       height = 4.5,
-       width = 10)
+ggsave('Depression Boxplot.png', height = 4.5, width = 10)
 
 
 plot <-
   ggplot(ibsr_data, aes(x = Time, y = bdi_total)) +
   geom_jitter(
     aes(fill = `Initial Depression`),
-    size = 2.5,
+    size = 4,
     shape = 21,
     na.rm = TRUE
   ) +
@@ -110,8 +110,12 @@ plot <-
       "T7" = "One Year"
     )
   ) +
-  theme(legend.position = c(1, 1),
-        legend.justification = c(1, 1)) +
+  theme(
+    legend.position = c(1, 1),
+    legend.justification = c(1, 1),
+    axis.text = element_text(size = 15),
+    axis.title = element_text(size = 18)
+  ) +
   facet_wrap(facets = vars(`Initial Depression`), nrow = 2)
 plot
 
@@ -229,4 +233,4 @@ ggsave('Depression Boxplot2.png',
 #
 #
 #     mapply(no23_plotting_func, measures, nice_measures)
-#     
+#
