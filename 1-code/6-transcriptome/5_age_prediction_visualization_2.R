@@ -1,5 +1,4 @@
-###
-#####all the participants with at least 2 samples
+#####all the depressed participants with at least 2 samples
 no_source()
 library(tidyverse)
 setwd(r4projects::get_project_wd())
@@ -24,9 +23,11 @@ load("3-data_analysis/transcriptomics/data_preparation/transcriptomics_data")
 
 library(RNAAgeCalc)
 
-dir.create("3-data_analysis/transcriptomics/age_prediction/all_participants",
-           recursive = TRUE)
-setwd("3-data_analysis/transcriptomics/age_prediction/all_participants")
+dir.create(
+  "3-data_analysis/transcriptomics/age_prediction/all_depressed_participants",
+  recursive = TRUE
+)
+setwd("3-data_analysis/transcriptomics/age_prediction/all_depressed_participants")
 
 load("../result")
 
@@ -54,10 +55,20 @@ temp_data <-
   temp_data %>%
   dplyr::filter(subject_id %in% unique(temp_data$subject_id[duplicated(temp_data$subject_id)]))
 
+###only remain the depressed participants at T1
+depressed_subject_id <-
+  sample_info %>%
+  dplyr::filter(Time == "T1") %>%
+  dplyr::filter(bdi_total >= 14) %>%
+  dplyr::pull(subject_id)
+
+temp_data <-
+  temp_data %>%
+  dplyr::filter(subject_id %in% depressed_subject_id)
+
 length(unique(temp_data$subject_id))
 
-##44 subjects
-
+##21 subjects
 plot <-
   temp_data %>%
   dplyr::mutate(subject_id = factor(subject_id, levels = stringr::str_sort(unique(
@@ -164,6 +175,7 @@ wilcox.test(
     pull(AgeAccelResid),
   paired = TRUE
 )
+
 
 wilcox.test(
   t2_data %>%

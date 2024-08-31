@@ -1,4 +1,3 @@
-###don't use this one
 #####all the depressed participants with at least 2 samples, and the age acceleration residual > 0 at T1
 no_source()
 library(tidyverse)
@@ -28,88 +27,29 @@ dir.create(
   "3-data_analysis/transcriptomics/age_prediction/all_depressed_participants_AccelResid_bigger0_t1",
   recursive = TRUE
 )
-setwd("3-data_analysis/transcriptomics/age_prediction/all_depressed_participants_AccelResid_bigger0_t1")
+setwd(
+  "3-data_analysis/transcriptomics/age_prediction/all_depressed_participants_AccelResid_bigger0_t1"
+)
 
-load("../t1_result")
-load("../t2_result")
-load("../t3_result")
-load("../t4_result")
-load("../t5_result")
-load("../t6_result")
+load("../result")
 
 ###summary
-t1_result <-
-  t1_result %>%
+result <-
+  result %>%
+  tibble::rownames_to_column(var = "sample_id") %>%
   dplyr::mutate(subject_id = stringr::str_extract(sample_id, "[0-9]{1,2}")) %>%
-  dplyr::arrange(subject_id)
+  dplyr::mutate(time_point = stringr::str_extract(sample_id, "T[0-9]{1,2}")) %>%
+  dplyr::arrange(subject_id, time_point)
 
-t2_result <-
-  t2_result %>%
-  dplyr::mutate(subject_id = stringr::str_extract(sample_id, "[0-9]{1,2}")) %>%
-  dplyr::arrange(subject_id)
 
-t3_result <-
-  t3_result %>%
-  dplyr::mutate(subject_id = stringr::str_extract(sample_id, "[0-9]{1,2}")) %>%
-  dplyr::arrange(subject_id)
-
-t4_result <-
-  t4_result %>%
-  dplyr::mutate(subject_id = stringr::str_extract(sample_id, "[0-9]{1,2}")) %>%
-  dplyr::arrange(subject_id)
-
-t5_result <-
-  t5_result %>%
-  dplyr::mutate(subject_id = stringr::str_extract(sample_id, "[0-9]{1,2}")) %>%
-  dplyr::arrange(subject_id)
-
-t6_result <-
-  t6_result %>%
-  dplyr::mutate(subject_id = stringr::str_extract(sample_id, "[0-9]{1,2}")) %>%
-  dplyr::arrange(subject_id)
-
-t1_result <-
-  t1_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge, time_point = "T1") %>%
+result <-
+  result %>%
+  dplyr::mutate(age_diff = RNAAge - ChronAge) %>%
   dplyr::select(subject_id, age_diff, time_point, AgeAccelResid)
-
-t2_result <-
-  t2_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge, time_point = "T2") %>%
-  dplyr::select(subject_id, age_diff, time_point, AgeAccelResid)
-
-t3_result <-
-  t3_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge, time_point = "T3") %>%
-  dplyr::select(subject_id, age_diff, time_point, AgeAccelResid)
-
-t4_result <-
-  t4_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge, time_point = "T4") %>%
-  dplyr::select(subject_id, age_diff, time_point) %>%
-  dplyr::mutate(AgeAccelResid = NA)
-
-t5_result <-
-  t5_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge, time_point = "T5") %>%
-  dplyr::select(subject_id, age_diff, time_point) %>%
-  dplyr::mutate(AgeAccelResid = NA)
-
-t6_result <-
-  t6_result %>%
-  dplyr::mutate(age_diff = RNAAge - ChronAge, time_point = "T6") %>%
-  dplyr::select(subject_id, age_diff, time_point) %>%
-  dplyr::mutate(AgeAccelResid = NA)
-
 
 ####AgeAccelResid
 temp_data <-
-  rbind(t1_result,
-        t2_result,
-        t3_result,
-        t4_result,
-        t5_result,
-        t6_result) %>%
+  result %>%
   dplyr::filter(!is.na(AgeAccelResid))
 
 ###only remain the subject with at least two samples
@@ -166,6 +106,7 @@ library(ggsignif)
 
 plot <-
   temp_data %>%
+  dplyr::filter(time_point %in% c("T1", "T2", "T3")) %>%
   dplyr::mutate(subject_id = factor(subject_id, levels = stringr::str_sort(unique(
     temp_data$subject_id
   ), numeric = TRUE))) %>%
@@ -219,6 +160,31 @@ t3_data <-
   temp_data %>%
   dplyr::filter(time_point == "T3") %>%
   dplyr::arrange(subject_id)
+
+
+mean(t2_data %>%
+  dplyr::filter(
+    subject_id %in% intersect(t1_data$subject_id, t2_data$subject_id)
+  ) %>%
+  pull(AgeAccelResid) - 
+  t1_data %>%
+  dplyr::filter(
+    subject_id %in% intersect(t1_data$subject_id, t2_data$subject_id)
+  ) %>%
+  pull(AgeAccelResid)
+)
+
+mean(t3_data %>%
+       dplyr::filter(
+         subject_id %in% intersect(t1_data$subject_id, t3_data$subject_id)
+       ) %>%
+       pull(AgeAccelResid) - 
+       t1_data %>%
+       dplyr::filter(
+         subject_id %in% intersect(t1_data$subject_id, t3_data$subject_id)
+       ) %>%
+       pull(AgeAccelResid)
+)
 
 wilcox.test(
   t1_data %>%
