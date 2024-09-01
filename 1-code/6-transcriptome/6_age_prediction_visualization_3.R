@@ -81,7 +81,7 @@ temp_data <-
 
 length(unique(temp_data$subject_id))
 
-##10 subjects
+##11 subjects
 
 plot <-
   temp_data %>%
@@ -161,8 +161,13 @@ t3_data <-
   dplyr::filter(time_point == "T3") %>%
   dplyr::arrange(subject_id)
 
+mean(t1_data$AgeAccelResid)
+mean(t2_data$AgeAccelResid)
+mean(t3_data$AgeAccelResid)
 
-mean(t2_data %>%
+
+mean(
+  t2_data %>%
   dplyr::filter(
     subject_id %in% intersect(t1_data$subject_id, t2_data$subject_id)
   ) %>%
@@ -172,6 +177,19 @@ mean(t2_data %>%
     subject_id %in% intersect(t1_data$subject_id, t2_data$subject_id)
   ) %>%
   pull(AgeAccelResid)
+)
+
+sd(
+  abs(t2_data %>%
+       dplyr::filter(
+         subject_id %in% intersect(t1_data$subject_id, t2_data$subject_id)
+       ) %>%
+       pull(AgeAccelResid) - 
+       t1_data %>%
+       dplyr::filter(
+         subject_id %in% intersect(t1_data$subject_id, t2_data$subject_id)
+       ) %>%
+       pull(AgeAccelResid))
 )
 
 mean(t3_data %>%
@@ -184,6 +202,20 @@ mean(t3_data %>%
          subject_id %in% intersect(t1_data$subject_id, t3_data$subject_id)
        ) %>%
        pull(AgeAccelResid)
+)
+
+sd(
+  abs(t3_data %>%
+       dplyr::filter(
+         subject_id %in% intersect(t1_data$subject_id, t3_data$subject_id)
+       ) %>%
+       pull(AgeAccelResid) - 
+       t1_data %>%
+       dplyr::filter(
+         subject_id %in% intersect(t1_data$subject_id, t3_data$subject_id)
+       ) %>%
+       pull(AgeAccelResid)
+  )
 )
 
 wilcox.test(

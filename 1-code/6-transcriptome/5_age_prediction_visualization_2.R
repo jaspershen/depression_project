@@ -190,3 +190,4 @@ wilcox.test(
     pull(AgeAccelResid),
   paired = TRUE
 )
+
