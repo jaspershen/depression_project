@@ -128,6 +128,21 @@ temp_data <-
   temp_data %>%
   dplyr::filter(subject_id %in% remain_subject_id)
 
+
+length(unique(temp_data$subject_id))
+
+mean(temp_data$AgeAccelResid[temp_data$time_point == "T1"])
+mean(temp_data$AgeAccelResid[temp_data$time_point == "T2"])
+mean(temp_data$AgeAccelResid[temp_data$time_point == "T3"])
+
+sd(temp_data$AgeAccelResid[temp_data$time_point == "T1"])
+sd(temp_data$AgeAccelResid[temp_data$time_point == "T2"])
+sd(temp_data$AgeAccelResid[temp_data$time_point == "T3"])
+
+sum(temp_data$time_point == "T1")
+sum(temp_data$time_point == "T2")
+sum(temp_data$time_point == "T3")
+
 length(unique(temp_data$subject_id))
 
 ##19 subjects

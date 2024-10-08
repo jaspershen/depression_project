@@ -151,15 +151,21 @@ t1_data <-
   dplyr::filter(time_point == "T1") %>%
   dplyr::arrange(subject_id)
 
+dim(t1_data)
+
 t2_data <-
   temp_data %>%
   dplyr::filter(time_point == "T2") %>%
   dplyr::arrange(subject_id)
 
+dim(t2_data)
+
 t3_data <-
   temp_data %>%
   dplyr::filter(time_point == "T3") %>%
   dplyr::arrange(subject_id)
+
+dim(t3_data)
 
 mean(t1_data$AgeAccelResid)
 mean(t2_data$AgeAccelResid)
@@ -260,3 +266,4 @@ wilcox.test(
     pull(AgeAccelResid),
   paired = TRUE
 )
+
