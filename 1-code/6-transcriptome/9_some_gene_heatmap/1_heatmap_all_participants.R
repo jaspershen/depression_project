@@ -8,8 +8,10 @@ library(tidyverse)
 
 load("3-data_analysis/transcriptomics/data_preparation/transcriptomics_data")
 
-dir.create("3-data_analysis/transcriptomics/heatmap_for_some_genes/all_participant",
-           recursive = TRUE)
+dir.create(
+  "3-data_analysis/transcriptomics/heatmap_for_some_genes/all_participant",
+  recursive = TRUE
+)
 setwd("3-data_analysis/transcriptomics/heatmap_for_some_genes/all_participant")
 
 # data <- readr::read_csv("Gene.csv")
@@ -123,7 +125,7 @@ new_expression_data <-
 
 
 temp_data1 <-
-  new_expression_data[gene_list1,]
+  new_expression_data[gene_list1, ]
 
 library(ComplexHeatmap)
 
@@ -159,7 +161,7 @@ ggsave(plot1,
 
 
 temp_data2 <-
-  new_expression_data[gene_list2,]
+  new_expression_data[gene_list2, ]
 
 library(ComplexHeatmap)
 
@@ -195,6 +197,7 @@ ggsave(plot2,
 
 ####Heatmap for all the participants
 dim(expression_data)
+
 temp_data1 <-
   expression_data[gene_list1, ]
 
@@ -209,7 +212,6 @@ sample_info <-
   ) %>%
   dplyr::arrange(time_point, subject_id) %>%
   dplyr::mutate(subject_id = as.character(subject_id))
-
 
 ##remove the subjects without T1 or only with one time point
 library(plyr)
@@ -226,7 +228,6 @@ remove_subject_id <-
     return(NULL)
   }) %>%
   unlist()
-
 
 if (length(remove_subject_id) > 0) {
   sample_info <-
@@ -282,7 +283,6 @@ temp_data1 <-
   do.call(cbind, .) %>%
   as.data.frame()
 
-
 temp_data1 <-
   temp_data1[, sample_info$sample_id]
 
@@ -318,7 +318,6 @@ subject_color <-
   colorRampPalette(colors = ggsci::pal_lancet()(n = 9))(length(levels(sample_info$subject_id)))
 
 names(subject_color) <- levels(sample_info$subject_id)
-
 
 column_anno <-
   HeatmapAnnotation(subject_id = sample_info$subject_id,
@@ -378,7 +377,9 @@ plot2
 
 plot2 <-
   ggplotify::as.ggplot(plot2)
+
 plot2
+
 ggsave(plot2,
        filename = "gene_list2_all_heatmap.pdf",
        width = 7,
@@ -388,4 +389,3 @@ ggsave(plot2,
        filename = "gene_list2_all_heatmap.png",
        width = 7,
        height = 7)
-
