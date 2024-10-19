@@ -160,3 +160,10 @@ ggsave(plot2, filename = "pca_t2.png", width = 9, height = 7)
 ggsave(plot3, filename = "pca_t3.png", width = 9, height = 7)
 ggsave(plot4, filename = "pca_t4.png", width = 9, height = 7)
 ggsave(plot5, filename = "pca_t5.png", width = 9, height = 7)
+
+
+plot1
+plot2
+plot3
+plot4
+plot5

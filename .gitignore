@@ -18,6 +18,10 @@ summary/
 5-summary
 5-summary/
 
+###remove some code
+
+
+
 3-data_analysis/for_ariel_20220714/processed_metabolites_data.csv
 3-data_analysis/metabolomics_data/data_preparation/expression_data
 3-data_analysis/metabolomics_data/data_preparation/peaks/expression_data
@@ -32,3 +36,9 @@ summary/
 3-data_analysis/transcriptomics/Ganz - Gene CPM Log2.txt
 3-data_analysis/transcriptomics/heatmap_for_some_genes/Gene.csv
 3-data_analysis/transcriptomics/heatmap/Gene.csv
+
+1-code/1-cardiopanel/
+1-code/2-cytokine/
+1-code/3-lipid/
+1-code/4-metabolic_panel/
+1-code/5-metabolomics/

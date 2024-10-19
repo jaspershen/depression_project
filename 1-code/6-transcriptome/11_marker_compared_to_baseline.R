@@ -61,16 +61,16 @@ variable_info <-
 
 #find all the genes in different time points
 subject_data <-
-  sample_info$Time %>% 
-  sort() %>% 
-  unique() %>% 
-  purrr::map(function(x){
-    expression_data[,which(sample_info$Time == x)]
+  sample_info$Time %>%
+  sort() %>%
+  unique() %>%
+  purrr::map(function(x) {
+    expression_data[, which(sample_info$Time == x)]
   })
 
 names(subject_data) <-
-  sample_info$Time %>% 
-  sort() %>% 
+  sample_info$Time %>%
+  sort() %>%
   unique()
 
 table(sample_info$Time)
@@ -79,53 +79,53 @@ table(sample_info$Time)
 #   pbapply::pblapply(subject_data[-1], function(x) {
 #     base_data <-
 #       subject_data[[1]]
-#     
+#
 #     compare_data <-
 #       x
-#     
+#
 #     sample_info1 <-
-#     sample_info %>% 
-#       dplyr::filter(sample_id %in% colnames(base_data)) %>% 
+#     sample_info %>%
+#       dplyr::filter(sample_id %in% colnames(base_data)) %>%
 #       dplyr::arrange(subject_id)
-#     
+#
 #     sample_info2 <-
-#       sample_info %>% 
-#       dplyr::filter(sample_id %in% colnames(x)) %>% 
+#       sample_info %>%
+#       dplyr::filter(sample_id %in% colnames(x)) %>%
 #       dplyr::arrange(subject_id)
-#     
-#     intersect_subject_id <- 
+#
+#     intersect_subject_id <-
 #     intersect(sample_info1$subject_id,
 #               sample_info2$subject_id)
-#     
+#
 #     sample_info1 <-
-#       sample_info1 %>% 
+#       sample_info1 %>%
 #       dplyr::filter(subject_id %in% intersect_subject_id)
-#     
+#
 #     sample_info2 <-
-#       sample_info2 %>% 
+#       sample_info2 %>%
 #       dplyr::filter(subject_id %in% intersect_subject_id)
-#     
-#     
+#
+#
 #     base_data <-
 #       base_data[,sample_info1$sample_id]
-#     
+#
 #     x <-
 #       x[,sample_info2$sample_id]
-#     
+#
 #     p_value <- lapply(1:nrow(x), function(idx) {
 #       wilcox.test(as.numeric(x[idx, ]), as.numeric(base_data[idx, ]))$p.value
 #     }) %>%
 #       unlist()
-# 
+#
 #     fdr <- p.adjust(p_value, method = "fdr")
-# 
+#
 #     fc <- lapply(1:nrow(x), function(idx) {
 #       mean(as.numeric(x[idx, ])) / mean(as.numeric(base_data[idx, ]))
 #     }) %>%
 #       unlist()
-# 
+#
 #     fc[is.infinite(fc)] <- max(fc[!is.infinite(fc)])
-# 
+#
 #     data.frame(
 #       variable_id = variable_info$variable_id,
 #       p_value,
@@ -134,7 +134,7 @@ table(sample_info$Time)
 #       stringsAsFactors = FALSE
 #     )
 #   })
-# 
+#
 # save(fc_p_value, file = "fc_p_value")
 
 load("fc_p_value")
@@ -144,31 +144,31 @@ load("fc_p_value")
 #   lapply(fc_p_value, function(x) {
 #     idx1 <- which(x$p_value < 0.05 & x$fc > 1)
 #     idx2 <- which(x$p_value < 0.05 & x$fc < 1)
-# 
+#
 #     gene1 <-
 #       try(data.frame(x[idx1, ],
 #                      class = "increase",
 #                      stringsAsFactors = FALSE),
 #           silent = TRUE)
-# 
+#
 #     if (class(gene1) == "try-error") {
 #       gene1 <- NULL
 #     }
-# 
+#
 #     gene2 <-
 #       try(data.frame(x[idx2, ],
 #                      class = "decrease",
 #                      stringsAsFactors = FALSE),
 #           silent = TRUE)
-# 
+#
 #     if (class(gene2) == "try-error") {
 #       gene2 <- NULL
 #     }
-# 
+#
 #     rbind(gene1, gene2)
 #   })
-# 
-# 
+#
+#
 # save(marker_each_point, file = "marker_each_point")
 load("marker_each_point")
 
@@ -208,8 +208,7 @@ temp_data <-
         )
     }
     x <-
-      data.frame(variable_id = all_marker_name,
-                 stringsAsFactors = FALSE) %>%
+      data.frame(variable_id = all_marker_name, stringsAsFactors = FALSE) %>%
       left_join(x, by = "variable_id") %>%
       dplyr::select(variable_id, class)
     
@@ -220,7 +219,7 @@ temp_data <-
 
 names(temp_data) <-
   names(subject_data)[-1]
-  
+
 temp_data <-
   purrr::map2(
     .x = temp_data,
