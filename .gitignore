@@ -12,11 +12,23 @@ summary/
 2-data
 2-data/
 
-3-data_analysis
-3-data_analysis/
-
 4-manuscript
 4-manuscript/
 
 5-summary
 5-summary/
+
+3-data_analysis/for_ariel_20220714/processed_metabolites_data.csv
+3-data_analysis/metabolomics_data/data_preparation/expression_data
+3-data_analysis/metabolomics_data/data_preparation/peaks/expression_data
+3-data_analysis/metabolomics_data/MSMS Annotation/annotation_result.csv
+3-data_analysis/metabolomics_data/processed_metabolites_data.csv
+3-data_analysis/processed_metabolites_data.csv
+3-data_analysis/transcriptomics/age_prediction/all_depressed_subjects/expression_data.csv
+3-data_analysis/transcriptomics/age_prediction/data/expression_data.csv
+3-data_analysis/transcriptomics/age_prediction/expression_data.csv
+3-data_analysis/transcriptomics/data_preparation/expression_data
+3-data_analysis/transcriptomics/data_preparation/transcriptomics_data
+3-data_analysis/transcriptomics/Ganz - Gene CPM Log2.txt
+3-data_analysis/transcriptomics/heatmap_for_some_genes/Gene.csv
+3-data_analysis/transcriptomics/heatmap/Gene.csv

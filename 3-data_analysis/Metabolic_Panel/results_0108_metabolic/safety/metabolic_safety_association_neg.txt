@@ -1,0 +1,2 @@
+    Variables qvalue unadjusted pvalue
+1 GLP.1.total  0.282             0.047
