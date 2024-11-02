@@ -53,7 +53,6 @@ summary/
 3-data_analysis/transcriptomics/age_prediction/data/expression_data.csv
 3-data_analysis/transcriptomics/age_prediction/expression_data.csv
 3-data_analysis/transcriptomics/data_preparation/expression_data
-3-data_analysis/transcriptomics/data_preparation/transcriptomics_data
 3-data_analysis/transcriptomics/Ganz - Gene CPM Log2.txt
 3-data_analysis/transcriptomics/heatmap_for_some_genes/Gene.csv
 3-data_analysis/transcriptomics/heatmap/Gene.csv
