@@ -1,5 +1,5 @@
 no_function
-
+library(tidyverse)
 setwd(r4projects::get_project_wd())
 
 rm(list = ls())
@@ -11,7 +11,6 @@ dir.create("3-data_analysis/some_figures/table2/network")
 setwd("3-data_analysis/some_figures/table2/network")
 
 ###network to show the correlations between disease and molecules
-
 edge_data <-
   data %>%
   dplyr::select(Disease, Metabolite, correlation, qvalue, Class) %>%
@@ -22,10 +21,8 @@ edge_data <-
 
 node_data <-
   data.frame(
-    node = c(edge_data$node1[1],
-             edge_data$node2),
-    class = c(edge_data$node1_class[1],
-              edge_data$node2_class)
+    node = c(edge_data$node1[1], edge_data$node2),
+    class = c(edge_data$node1_class[1], edge_data$node2_class)
   )
 
 library(tidygraph)
@@ -57,8 +54,7 @@ coords =
 coords <-
   coords %>%
   dplyr::mutate(y1 = x) %>%
-  dplyr::mutate(x1 = case_when(y == 1 ~ 0,
-                               y == 0 ~ 1)) %>%
+  dplyr::mutate(x1 = case_when(y == 1 ~ 0, y == 0 ~ 1)) %>%
   dplyr::select(-c(x, y)) %>%
   dplyr::select(x = x1, y = y1, everything())
 
@@ -78,13 +74,11 @@ plot =
          layout = "manual",
          x = coords$x,
          y = coords$y) +
-  geom_edge_diagonal(aes(color = correlation,
-                         width = -log(qvalue, 10)),
+  geom_edge_diagonal(aes(color = correlation, width = -log(qvalue, 10)),
                      alpha = 0.5,
                      show.legend = TRUE) +
   geom_node_point(
-    aes(fill = class,
-        size = Degree),
+    aes(fill = class, size = Degree),
     shape = 21,
     alpha = 1,
     show.legend = TRUE
@@ -105,8 +99,7 @@ plot =
   # scale_color_manual(values = c(class_color, wearable_color)) +
   guides(
     linetype = "none",
-    color = guide_colorbar(title = "Correlation",
-                           override.aes = list(linetype = "none")),
+    color = guide_colorbar(title = "Correlation", override.aes = list(linetype = "none")),
     size = guide_legend(
       title = "Degree",
       override.aes = list(
@@ -126,9 +119,7 @@ plot =
     )
   ) +
   scale_edge_width_continuous(range = c(1, 4)) +
-  ggraph::scale_edge_color_gradientn(colours = c(alpha("#3B4992FF", 0.7),
-                                                 "white",
-                                                 alpha("#EE0000FF", 0.7))) +
+  ggraph::scale_edge_color_gradientn(colours = c(alpha("#3B4992FF", 0.7), "white", alpha("#EE0000FF", 0.7))) +
   ggraph::theme_graph() +
   theme(
     plot.background = element_rect(fill = "transparent", color = NA),
@@ -150,4 +141,3 @@ ggsave(plot,
        filename = "network.png",
        width = 7,
        height = 7)
-

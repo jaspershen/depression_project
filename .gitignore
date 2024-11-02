@@ -18,7 +18,7 @@ summary/
 5-summary
 5-summary/
 
-###remove some code
+###remove some files
 
 
 
@@ -42,3 +42,18 @@ summary/
 1-code/3-lipid/
 1-code/4-metabolic_panel/
 1-code/5-metabolomics/
+
+3-data_analysis/for_ariel_20220714/processed_metabolites_data.csv
+3-data_analysis/metabolomics_data/data_preparation/expression_data
+3-data_analysis/metabolomics_data/data_preparation/peaks/expression_data
+3-data_analysis/metabolomics_data/MSMS Annotation/annotation_result.csv
+3-data_analysis/metabolomics_data/processed_metabolites_data.csv
+3-data_analysis/processed_metabolites_data.csv
+3-data_analysis/transcriptomics/age_prediction/all_depressed_subjects/expression_data.csv
+3-data_analysis/transcriptomics/age_prediction/data/expression_data.csv
+3-data_analysis/transcriptomics/age_prediction/expression_data.csv
+3-data_analysis/transcriptomics/data_preparation/expression_data
+3-data_analysis/transcriptomics/data_preparation/transcriptomics_data
+3-data_analysis/transcriptomics/Ganz - Gene CPM Log2.txt
+3-data_analysis/transcriptomics/heatmap_for_some_genes/Gene.csv
+3-data_analysis/transcriptomics/heatmap/Gene.csv
