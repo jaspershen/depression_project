@@ -1,0 +1,16 @@
+Call:
+SAM(x = t(data.matrix(cardio_safety_change_all$x_change)), y = data.matrix(cardio_safety_change_all$y_change), 
+    resp.type = "Quantitative", genenames = colnames(cardio_safety_change_all$x_change), 
+    random.seed = 6)
+
+Genes up
+     Gene ID     Gene Name Score(d) Numerator(r) Denominator(s+s0) q-value(%)
+[1,] AGP         4         1.38     0.623        0.451             0         
+[2,] Fetuin.A    3         1.153    0.494        0.428             0         
+[3,] Fibrinogen  5         0.857    0.404        0.471             0         
+[4,] SAP         7         0.382    0.186        0.486             40        
+[5,] Haptoglobin 8         0.359    0.163        0.454             40        
+
+Genes down
+          Gene ID         Gene Name          Score(d)      Numerator(r) Denominator(s+s0)        q-value(%) 
+              CRP                 2            -1.235            -0.544              0.44                 0 

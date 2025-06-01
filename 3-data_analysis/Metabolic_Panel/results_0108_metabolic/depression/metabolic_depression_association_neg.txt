@@ -1,5 +1,0 @@
-     Variables qvalue unadjusted pvalue
-1 Amylin.total  0.000             0.000
-2    C.Peptide  0.006             0.001
-3       Leptin  0.104             0.026
-4      Insulin  0.204             0.068

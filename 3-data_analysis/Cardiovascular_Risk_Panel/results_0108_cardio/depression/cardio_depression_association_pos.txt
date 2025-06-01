@@ -1,3 +1,0 @@
-  Variables qvalue unadjusted pvalue
-1        V3  0.010             0.001
-2        V1  0.095             0.019

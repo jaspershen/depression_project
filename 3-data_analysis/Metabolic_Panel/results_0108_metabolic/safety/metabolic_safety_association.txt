@@ -1,8 +1,0 @@
-[1] "How variables are associated with perceived safety? (permute within patients)"
-[1] "Positively associated:"
-  Variables qvalue unadjusted pvalue
-1    Leptin      0                 0
-[1] ""
-[1] "Negatively associated:"
-    Variables qvalue unadjusted pvalue
-1 GLP.1.total  0.282             0.047

@@ -1,4 +1,0 @@
-    Variables    qvalue unadjusted pvalue
-1   PF4.CXCL4 0.0700000             0.007
-2 Haptoglobin 0.1033333             0.031
-3         SAP 0.1300000             0.065

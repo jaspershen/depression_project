@@ -1,0 +1,14 @@
+Call:
+SAM(x = t(data.matrix(metabolic_depression_change_all$x_change)), 
+    y = data.matrix(metabolic_depression_change_all$y_change), 
+    resp.type = "Quantitative", genenames = colnames(metabolic_depression_change_all$x_change), 
+    random.seed = 6)
+
+Genes up
+NULL
+
+Genes down
+     Gene ID Gene Name Score(d) Numerator(r) Denominator(s+s0) q-value(%)
+[1,] TNFa    12        -0.993   -0.884       0.89              44.444    
+[2,] Leptin  8         -0.618   -0.557       0.901             44.444    
+[3,] Ghrelin 3         -0.596   -0.578       0.969             44.444    

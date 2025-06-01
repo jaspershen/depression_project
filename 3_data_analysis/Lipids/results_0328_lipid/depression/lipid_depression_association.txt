@@ -1,0 +1,16 @@
+[1] "How lipids are associated with depression? (permute within patients)"
+[1] "Positively associated:"
+          Variables index correlation    qvalue pvalue
+FFA.22.6. FFA.22.6.   102   0.4707771 0.0000000  0.000
+FFA.20.4. FFA.20.4.    95   0.4577355 0.0000000  0.000
+FFA.22.4. FFA.22.4.   100   0.4431028 0.0000000  0.000
+FFA.22.5. FFA.22.5.   101   0.4121816 0.1001429  0.001
+FFA.18.2. FFA.18.2.    88   0.4109141 0.0000000  0.000
+FFA.16.1. FFA.16.1.    84   0.3879084 0.1557778  0.002
+FFA.12.0. FFA.12.0.    79   0.3778863 0.0000000  0.000
+FFA.18.3. FFA.18.3.    89   0.3724535 0.1001429  0.001
+FFA.20.5. FFA.20.5.    96   0.3270128 0.1557778  0.002
+[1] ""
+[1] "Negatively associated:"
+[1] Variables   index       correlation qvalue      pvalue     
+<0 rows> (or 0-length row.names)

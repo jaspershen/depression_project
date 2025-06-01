@@ -1,4 +1,0 @@
-                    Variables index correlation    qvalue pvalue
-RANTES.CCL5       RANTES.CCL5    38   0.2949592 0.1520000  0.002
-GCSF                     GCSF     6   0.2391708 0.3546667  0.014
-PAI.1.SERPIN.E PAI.1.SERPIN.E    71   0.2306687 0.3546667  0.012

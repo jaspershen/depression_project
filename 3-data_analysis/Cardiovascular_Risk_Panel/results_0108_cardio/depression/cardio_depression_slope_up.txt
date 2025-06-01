@@ -1,2 +1,0 @@
-          Gene ID         Gene Name          Score(d)      Numerator(r) Denominator(s+s0)        q-value(%) 
-        PF4.CXCL4                 9             1.065             0.616             0.579                 0 

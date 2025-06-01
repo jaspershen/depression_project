@@ -1,0 +1,2 @@
+          Gene ID         Gene Name          Score(d)      Numerator(r) Denominator(s+s0)        q-value(%) 
+              CRP                 2            -1.235            -0.544              0.44                 0 
